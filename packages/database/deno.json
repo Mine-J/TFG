@@ -1,0 +1,12 @@
+{
+    "name": "@tfg/database",
+    "exports": {
+      "./models": "./models/index.ts",
+      "./repositories": "./repositories/index.ts",
+      "./connection": "./connection.ts"
+    },
+    "tasks": {
+      "migrate": "deno run -A migrations/run.ts",
+      "seed": "deno run -A seeds/run.ts"
+    }
+  }

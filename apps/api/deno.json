@@ -1,0 +1,23 @@
+{
+    "name": "@tfg/api",
+    "tasks": {
+      "start": "deno run -A --watch main.ts",
+      "dev": "deno run -A --watch main.ts",
+      "check": "deno fmt --check && deno lint && deno check **/*.ts"
+    },
+    "imports": {
+      "$std/": "https://deno.land/std@0.216.0/",
+      "hono/": "https://deno.land/x/hono@v4.0.0/",
+      "@shared/": "../../packages/shared/",
+      "@db/": "../../packages/database/",
+      "@services/": "../../packages/services/"
+    },
+    "lint": {
+      "rules": {
+        "tags": ["recommended"]
+      }
+    },
+    "compilerOptions": {
+      "strict": true
+    }
+  }

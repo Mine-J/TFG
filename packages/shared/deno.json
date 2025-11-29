@@ -1,0 +1,8 @@
+{
+    "name": "@tfg/shared",
+    "exports": {
+      "./types": "./types/index.ts",
+      "./utils": "./utils/index.ts",
+      "./constants": "./constants/index.ts"
+    }
+  }
