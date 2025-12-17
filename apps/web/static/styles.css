@@ -1,0 +1,302 @@
+/* Estilos generales y centrado del formulario */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-logo {
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+.header-logo:hover {
+  opacity: 0.9;
+}
+
+.header {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+
+.header a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.header a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.header a.activo {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+/* Menu usuario dropdown */
+.menuUsuario {
+  position: relative;
+}
+
+.botonUsuario {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.botonUsuario:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.desplegableUsuario {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.dropdown a,
+.dropdown button {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  text-decoration: none;
+  color: #333;
+  background: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.dropdown a:hover,
+.dropdown button:hover {
+  background: #f0f0f0;
+}
+
+.pagina {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  padding: 20px;
+  background: #2c3e50;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.divPrincipalRegister {
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el título */
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+/* Estilos para los mensajes de éxito/error */
+.mensaje {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: transparent;
+  color: inherit;
+}
+
+/* Estilo para mensajes de error */
+.mensaje.error {
+  background-color: #ffecec;
+  color: #c00;
+  border: 1px solid #f5c2c2;
+}
+
+/* Estilo opcional para mensajes de éxito */
+.mensaje.success {
+  background-color: #e9ffef;
+  color: #116611;
+  border: 1px solid #bfeccf;
+}
+.divFormulario {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* Contenedor toggle liquid glass */
+.contenedorBotonesTipo {
+  display: flex;
+  position: relative;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50px;
+  padding: 5px;
+  width: fit-content;
+  margin: 20px auto;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Burbuja deslizante */
+.burbuja {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  height: calc(100% - 10px);
+  width: calc(50% - 5px);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  border-radius: 45px;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.1),
+    inset 0 2px 10px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+/* Mover burbuja a la derecha */
+.burbuja.farmacia {
+  transform: translateX(100%);
+}
+
+/* Botones del toggle */
+.BotonUsuarioFarmacia {
+  position: relative;
+  z-index: 1;
+  padding: 8px 30px;
+  border: none;
+  background: transparent;
+  color: #555;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  border-radius: 45px;
+}
+
+.BotonUsuarioFarmacia:hover {
+  color: #000;
+}
+
+.BotonUsuarioFarmacia.activo {
+  color: #000;
+  font-weight: 600;
+}
+
+/* Estilos para el formulario e inputs */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+input {
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 1rem;
+  font-size: 12px;
+  transition: border-color 0.3s;
+}
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Estilos para el botón de registro */
+button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Enlace volver al login/registro */
+.volverLoginRegister {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(0, 123, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.volverLogin:hover {
+  background: rgba(0, 123, 255, 0.2);
+  color: #0056b3;
+}
