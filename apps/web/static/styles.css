@@ -98,8 +98,8 @@ html, body {
   z-index: 1000;
 }
 
-.dropdown a,
-.dropdown button {
+.desplegableUsuario a,
+.desplegableUsuario button {
   display: block;
   width: 100%;
   padding: 12px 16px;
@@ -113,8 +113,8 @@ html, body {
   transition: background 0.2s;
 }
 
-.dropdown a:hover,
-.dropdown button:hover {
+.desplegableUsuario a:hover,
+.desplegableUsuario button:hover {
   background: #f0f0f0;
 }
 
