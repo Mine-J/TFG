@@ -2,44 +2,76 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
+import * as $_cesta_middleware from "./routes/(cesta)/_middleware.ts";
+import * as $_cesta_cesta from "./routes/(cesta)/cesta.tsx";
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $_layout from "./routes/_layout.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
+import * as $api_auth_RecuperarContraseña from "./routes/api/auth/RecuperarContraseña.ts";
+import * as $api_auth_RestablecerContraseña from "./routes/api/auth/RestablecerContraseña.ts";
+import * as $api_cesta_id_ from "./routes/api/cesta/[id].ts";
+import * as $api_cesta_actualizarCantidad from "./routes/api/cesta/actualizarCantidad.ts";
+import * as $api_cesta_añadir from "./routes/api/cesta/añadir.ts";
 import * as $api_login from "./routes/api/login.ts";
 import * as $api_logout from "./routes/api/logout.ts";
 import * as $api_obtenerDatos from "./routes/api/obtenerDatos.ts";
+import * as $api_producto_id_ from "./routes/api/producto/[id].ts";
+import * as $api_productos from "./routes/api/productos.ts";
 import * as $api_register from "./routes/api/register.ts";
 import * as $auth_middleware from "./routes/auth/_middleware.ts";
 import * as $auth_login from "./routes/auth/login.tsx";
+import * as $auth_recuperar_contraseña from "./routes/auth/recuperar-contraseña.tsx";
 import * as $auth_register from "./routes/auth/register.tsx";
-import * as $greet_name_ from "./routes/greet/[name].tsx";
+import * as $auth_restablecer_contraseña from "./routes/auth/restablecer-contraseña.tsx";
 import * as $index from "./routes/index.tsx";
+import * as $producto_id_ from "./routes/producto/[id].tsx";
+import * as $productos from "./routes/productos.tsx";
+import * as $BotonSolicitarProducto from "./islands/BotonSolicitarProducto.tsx";
+import * as $CestaComponent from "./islands/CestaComponent.tsx";
 import * as $Header from "./islands/Header.tsx";
 import * as $LoginForm from "./islands/LoginForm.tsx";
+import * as $RecuperarContraseña from "./islands/RecuperarContraseña.tsx";
 import * as $RegisterForm from "./islands/RegisterForm.tsx";
+import * as $RestablecerContraseña from "./islands/RestablecerContraseña.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
+    "./routes/(cesta)/_middleware.ts": $_cesta_middleware,
+    "./routes/(cesta)/cesta.tsx": $_cesta_cesta,
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
     "./routes/_layout.tsx": $_layout,
     "./routes/_middleware.ts": $_middleware,
+    "./routes/api/auth/RecuperarContraseña.ts": $api_auth_RecuperarContraseña,
+    "./routes/api/auth/RestablecerContraseña.ts": $api_auth_RestablecerContraseña,
+    "./routes/api/cesta/[id].ts": $api_cesta_id_,
+    "./routes/api/cesta/actualizarCantidad.ts": $api_cesta_actualizarCantidad,
+    "./routes/api/cesta/añadir.ts": $api_cesta_añadir,
     "./routes/api/login.ts": $api_login,
     "./routes/api/logout.ts": $api_logout,
     "./routes/api/obtenerDatos.ts": $api_obtenerDatos,
+    "./routes/api/producto/[id].ts": $api_producto_id_,
+    "./routes/api/productos.ts": $api_productos,
     "./routes/api/register.ts": $api_register,
     "./routes/auth/_middleware.ts": $auth_middleware,
     "./routes/auth/login.tsx": $auth_login,
+    "./routes/auth/recuperar-contraseña.tsx": $auth_recuperar_contraseña,
     "./routes/auth/register.tsx": $auth_register,
-    "./routes/greet/[name].tsx": $greet_name_,
+    "./routes/auth/restablecer-contraseña.tsx": $auth_restablecer_contraseña,
     "./routes/index.tsx": $index,
+    "./routes/producto/[id].tsx": $producto_id_,
+    "./routes/productos.tsx": $productos,
   },
   islands: {
+    "./islands/BotonSolicitarProducto.tsx": $BotonSolicitarProducto,
+    "./islands/CestaComponent.tsx": $CestaComponent,
     "./islands/Header.tsx": $Header,
     "./islands/LoginForm.tsx": $LoginForm,
+    "./islands/RecuperarContraseña.tsx": $RecuperarContraseña,
     "./islands/RegisterForm.tsx": $RegisterForm,
+    "./islands/RestablecerContraseña.tsx": $RestablecerContraseña,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
