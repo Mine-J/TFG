@@ -2,7 +2,7 @@ import { create, getNumericDate, verify } from "https://deno.land/x/djwt@v3.0.2/
 
 let key: CryptoKey | null = null;
 
-async function getKey(): Promise<CryptoKey> {
+export async function getKey(): Promise<CryptoKey> {
   if (!key) {
     const JWT_SECRET = Deno.env.get("JWT_SECRET");
     if (!JWT_SECRET) {
