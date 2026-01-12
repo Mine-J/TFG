@@ -120,55 +120,69 @@ export const LoginForm: FunctionalComponent = () => {
         </div>
 
         {tipo === "farmacia" && (
-          <form class="formulario" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="CIF"
-              value={cif}
-              onInput={(e) => setCif(e.currentTarget.value)}
-              disabled={loading}
-              required
-            />
+          <>
+            <form class="formulario" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="CIF"
+                value={cif}
+                onInput={(e) => setCif(e.currentTarget.value)}
+                disabled={loading}
+                required
+              />
 
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={passwordFarmacia}
-              onInput={(e) => setPasswordFarmacia(e.currentTarget.value)}
-              disabled={loading}
-              required
-            />
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={passwordFarmacia}
+                onInput={(e) => setPasswordFarmacia(e.currentTarget.value)}
+                disabled={loading}
+                required
+              />
 
-            <button type="submit" disabled={loading}>
-              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
-            </button>
-          </form>
+              <button type="submit" disabled={loading}>
+                {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+              </button>
+            </form>
+            
+              <a class="RecuperarContraseña" href="/auth/recuperar-contraseña">
+                ¿Olvidaste tu contraseña?
+              </a>
+            
+          </>
         )}
 
         {tipo === "usuario" && (
-          <form class="formulario" onSubmit={handleSubmit}>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onInput={(e) => setEmail(e.currentTarget.value)}
-              disabled={loading}
-              required
-            />
+          <>
+            <form class="formulario" onSubmit={handleSubmit}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onInput={(e) => setEmail(e.currentTarget.value)}
+                disabled={loading}
+                required
+              />
 
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={passwordUsuario}
-              onInput={(e) => setPasswordUsuario(e.currentTarget.value)}
-              disabled={loading}
-              required
-            />
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={passwordUsuario}
+                onInput={(e) => setPasswordUsuario(e.currentTarget.value)}
+                disabled={loading}
+                required
+              />
 
-            <button type="submit" disabled={loading}>
-              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
-            </button>
-          </form>
+              <button type="submit" disabled={loading}>
+                {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+              </button>
+            </form>
+            <div style="text-align: center;">
+              <a class="RecuperarContraseña" href="/auth/recuperar-contraseña">
+                ¿Olvidaste tu contraseña?
+              </a>
+            </div>
+          </>
         )}
       </div>
     </div>
