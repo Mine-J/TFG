@@ -10,6 +10,7 @@ export const RegisterForm: FunctionalComponent = () => {
   // Estados FARMACIA
   const [errorFarmacia, setErrorFarmacia] = useState("");
   const [cif, setCif] = useState("");
+  const [emailFarmacia, setEmailFarmacia] = useState("");
   const [passwordFarmacia, setPasswordFarmacia] = useState("");
   const [direccionFarmacia, setDireccionFarmacia] = useState("");
   const [cpFarmacia, setCpFarmacia] = useState("");
@@ -37,7 +38,8 @@ export const RegisterForm: FunctionalComponent = () => {
     if (tipo === "farmacia") {
       body = {
         tipo: "farmacia",
-        cif,
+        email: emailFarmacia,
+        cif: cif,
         password: passwordFarmacia,
         direccion: direccionFarmacia,
         cp: cpFarmacia,
@@ -57,7 +59,7 @@ export const RegisterForm: FunctionalComponent = () => {
     }
 
     try {
-      const res = await fetch("/api/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -137,6 +139,15 @@ export const RegisterForm: FunctionalComponent = () => {
         {tipo === "farmacia" && (
           <form class="formulario" onSubmit={handleSubmit}>
             <input
+              type="email"
+              placeholder="Email"
+              value={emailFarmacia}
+              onInput={(e) => setEmailFarmacia(e.currentTarget.value)}
+              disabled={loading}
+              required
+            />
+
+            <input
               type="text"
               placeholder="CIF"
               value={cif}
@@ -164,21 +175,20 @@ export const RegisterForm: FunctionalComponent = () => {
             />
 
             <input
-              type="number"
-              placeholder="Código Postal"
-              value={cpFarmacia}
-              onInput={(e) => setCpFarmacia(e.currentTarget.value)}
-              max={99999}
-              min={10000}
+              type="text"
+              placeholder="Teléfono +34 ..."
+              value={telefonoFarmacia}
+              onInput={(e) => setTelefonoFarmacia(e.currentTarget.value)}
               disabled={loading}
               required
             />
 
             <input
               type="text"
-              placeholder="Teléfono +34 ..."
-              value={telefonoFarmacia}
-              onInput={(e) => setTelefonoFarmacia(e.currentTarget.value)}
+              placeholder="Código Postal"
+              value={cpFarmacia}
+              onInput={(e) => setCpFarmacia(e.currentTarget.value)}
+              maxLength={5}
               disabled={loading}
               required
             />
@@ -246,12 +256,11 @@ export const RegisterForm: FunctionalComponent = () => {
             />
 
             <input
-              type="number"
+              type="text"
               placeholder="Código Postal"
               value={cpUsuario}
               onInput={(e) => setCpUsuario(e.currentTarget.value)}
-              max={99999}
-              min={10000}
+              maxLength={5}
               disabled={loading}
               required
             />
