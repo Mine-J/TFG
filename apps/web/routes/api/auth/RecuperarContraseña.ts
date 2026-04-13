@@ -1,6 +1,6 @@
 import { FreshContext, Handlers } from "$fresh/server.ts";
 import { query } from "@tfg/database/connection";
-import type { Usuario } from "@shared/types.ts";
+import type { Farmacia, Usuario } from "@shared/types.ts";
 import { create } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 
@@ -9,12 +9,17 @@ export const handler: Handlers = {
     try {
       const { email } = await req.json();
 
-      const usuarios = await query<Usuario>(
+      const userUsuarios = await query<Usuario>(
         `SELECT id, email, nombre FROM usuarios WHERE email = $1 LIMIT 1`,
         [email],
       );
 
-      if (usuarios.length === 0) {
+      const userFarmacias = await query<Farmacia>(
+        `SELECT id, email, cif FROM farmacias WHERE email = $1 LIMIT 1`,
+        [email],
+      );
+
+      if (userUsuarios.length === 0 && userFarmacias.length === 0) {
         return new Response(
           JSON.stringify({
             success: true,
@@ -23,8 +28,12 @@ export const handler: Handlers = {
           { status: 200, headers: { "Content-Type": "application/json" } },
         );
       }
-
-      const usuario = usuarios[0];
+      let user;
+      if (userFarmacias.length > 0) {
+        user = userFarmacias[0];
+      } else {
+        user = userUsuarios[0];
+      }
 
       const JWT_SECRET = Deno.env.get("JWT_SECRET");
       if (!JWT_SECRET) {
@@ -42,7 +51,7 @@ export const handler: Handlers = {
       const jwt = await create(
         { alg: "HS256", typ: "JWT" },
         {
-          id: usuario.id,
+          id: user.id,
           tipo: "recuperacion",
           exp: Math.floor(Date.now() / 1000) + (60 * 15),
         },
@@ -77,7 +86,7 @@ export const handler: Handlers = {
             content: "auto",
             html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #007bff;">Hola ${usuario.nombre},</h2>
+                <h2 style="color: #007bff;">Hola ${user.email},</h2>
                 <p>Has solicitado restablecer tu contraseña en FarmaFinder.</p>
                 <p>Haz clic en el siguiente botón para crear una nueva contraseña:</p>
                 <div style="text-align: center; margin: 30px 0;">

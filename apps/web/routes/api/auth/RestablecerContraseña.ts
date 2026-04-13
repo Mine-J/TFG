@@ -51,11 +51,17 @@ export const handler: Handlers = {
       const password_hash = await bcrypt.hash(nuevaContraseña);
 
       // Actualizar contraseña en la BD
-      await query(
+      const actualizado = await query(
         `UPDATE usuarios SET password_hash = $1 WHERE id = $2`,
         [password_hash, payload.id],
       );
 
+      if (actualizado.length === 0) {
+        await query(
+          `UPDATE farmacias SET password_hash = $1 WHERE id = $2`,
+          [password_hash, payload.id],
+        );
+      }
       return new Response(
         JSON.stringify({
           success: true,
