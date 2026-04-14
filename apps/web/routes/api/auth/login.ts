@@ -1,7 +1,7 @@
-import { query } from "../../../../packages/database/connection.ts"; // tu conexión
+import { query } from "../../../../../packages/database/connection.ts"; // tu conexión
 import { FreshContext, Handlers } from "$fresh/server.ts";
-import type { Farmacia, Usuario } from "../../../../packages/shared/types.ts";
-import { generarToken } from "../../../../packages/shared/jwt.ts";
+import type { Farmacia, Usuario } from "../../../../../packages/shared/types.ts";
+import { generarToken } from "../../../../../packages/shared/jwt.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 
 export const handler: Handlers = {
@@ -24,7 +24,6 @@ export const handler: Handlers = {
           });
         }
 
-        // Verificar la contraseña hasheada
         const passwordMatch = await bcrypt.compare(password, farmacia.password_hash);
         if (!passwordMatch) {
           return new Response(JSON.stringify("Contraseña incorrecta"), {
@@ -33,7 +32,6 @@ export const handler: Handlers = {
           });
         }
 
-        // Generar JWT
         const farmaciaId = result[0].id!;
         const token = await generarToken({ id: String(farmaciaId), tipo: "farmacia" });
         const maxAge = 60 * 60 * 24 * 7; // 7 días
@@ -46,7 +44,6 @@ export const handler: Handlers = {
       } else if (body.tipo === "usuario") {
         const { email, password } = body;
 
-        // Aquí iría la lógica para autenticar al usuario
         const result = (await query(
           `SELECT * FROM usuarios WHERE LOWER(email) = LOWER($1) LIMIT 1`,
           [email],
@@ -60,7 +57,6 @@ export const handler: Handlers = {
           });
         }
 
-        // Verificar la contraseña hasheada
         const passwordMatch = await bcrypt.compare(password, user.password_hash);
         if (!passwordMatch) {
           return new Response(JSON.stringify("Contraseña incorrecta"), {
@@ -69,7 +65,6 @@ export const handler: Handlers = {
           });
         }
 
-        // Generar JWT
         const usuarioId = result[0].id!;
         const token = await generarToken({ id: String(usuarioId), tipo: "usuario" });
         const maxAge = 60 * 60 * 24 * 7; // 7 días
