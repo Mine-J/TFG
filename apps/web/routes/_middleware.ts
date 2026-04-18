@@ -24,17 +24,26 @@ export async function handler(req: Request, ctx: FreshContext) {
   if (authToken) {
     const payload = await verificarToken(authToken);
     tieneSesion = payload !== null;
-  }
+    
 
-  if (tieneSesion) {
-    return await ctx.next();
-  } else if (!esAuth) {
-    const headers = new Headers();
-    headers.set("location", "/auth/register");
-    return new Response(null, {
-      status: 303,
-      headers,
-    });
+    if (tieneSesion) {
+      if (payload?.tipo === "farmacia" && !path.startsWith("/farmacia/")) {
+        const headers = new Headers();
+        headers.set("location", "/farmacia");
+        return new Response(null, {
+          status: 303,
+          headers,
+        });
+      }
+      return await ctx.next();
+    } else if (!esAuth) {
+      const headers = new Headers();
+      headers.set("location", "/auth/register");
+      return new Response(null, {
+        status: 303,
+        headers,
+      });
+    }
   }
 
   return ctx.next();

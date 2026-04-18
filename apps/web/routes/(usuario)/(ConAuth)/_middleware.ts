@@ -38,17 +38,43 @@ export async function handler(req: Request, ctx: FreshContext) {
     });
   }
 
-  const cesta = await query(`SELECT * FROM cesta WHERE usuario_id = $1 LIMIT 1`, [
-    payload.id,
-  ]);
+  if (path === "/cesta") {
+    const cesta = await query(`SELECT * FROM cesta WHERE usuario_id = $1 LIMIT 1`, [
+      payload.id,
+    ]);
+    if (cesta.length === 0) {
+      const headers = new Headers();
+      headers.set("location", "/");
+      return new Response(null, {
+        status: 303,
+        headers,
+      });
+    }
+  } else if (path === "/pedidos") {
+    const pedidos = await query(`SELECT * FROM pedidos WHERE usuario_id = $1`, [
+      payload.id,
+    ]);
 
-  if (cesta.length === 0 && path === "/cesta") {
-    const headers = new Headers();
-    headers.set("location", "/");
-    return new Response(null, {
-      status: 303,
-      headers,
-    });
+    if (pedidos.length === 0) {
+      const headers = new Headers();
+      headers.set("location", "/");
+      return new Response(null, {
+        status: 303,
+        headers,
+      });
+    }
+  } else if (path === "/modificar-datos") {
+    const usuario = await query(`SELECT * FROM usuarios WHERE id = $1 LIMIT 1`, [
+      payload.id,
+    ]);
+    if (usuario.length === 0) {
+      const headers = new Headers();
+      headers.set("location", "/");
+      return new Response(null, {
+        status: 303,
+        headers,
+      });
+    }
   }
 
   return ctx.next();
