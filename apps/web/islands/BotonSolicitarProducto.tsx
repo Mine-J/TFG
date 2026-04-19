@@ -63,6 +63,7 @@ export const BotonSolicitarProducto: FunctionalComponent<{ nregistro: string }> 
       type="button"
       onClick={solicitar}
       class="boton-prospecto"
+      disabled={!userId}
     >
       {enCesta ? "🛒 Quitar de la cesta" : " 🛒 Añadir a la cesta"}
     </button>
