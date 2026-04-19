@@ -7,8 +7,10 @@ export const CestaComponent: FunctionalComponent = () => {
   const [cargando, setCargando] = useState(true);
   const [user, setUser] = useState<Usuario | null>(null);
   const [distancia, setDistancia] = useState<number>(1);
+  const [haciendoPedido, setHaciendoPedido] = useState(false);
 
   const handleHacerPedido = () => {
+    setHaciendoPedido(true);
     fetch("/api/cesta/realizarPedido", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -235,8 +237,8 @@ export const CestaComponent: FunctionalComponent = () => {
                 <span class="info-usuario-input-suffix">km</span>
               </div>
             </div>
-            <button type="submit" class="btn-hacer-pedido" onClick={handleHacerPedido}>
-              Hacer Pedido
+            <button type="submit" class="btn-hacer-pedido" onClick={handleHacerPedido} disabled={haciendoPedido}>
+              {haciendoPedido ? "Cargando..." : "Hacer Pedido"}
             </button>
           </div>
         )}
