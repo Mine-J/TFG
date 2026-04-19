@@ -6,9 +6,23 @@ export default function Header() {
   const [user, setUser] = useState<Usuario | null>(null);
   const [menuAbierto, setMenuAbierto] = useState(false);
   const obtenerUsuario = async () => {
-    const res = await fetch("/api/Datos/obtenerDatos");
-    const userData = await res.json();
-    setUser(userData);
+    try {
+      const res = await fetch("/api/Datos/obtenerDatos");
+      if (!res.ok) {
+        setUser(null);
+        return;
+      }
+
+      const userData = await res.json();
+      if (userData && typeof userData === "object" && "id" in userData) {
+        setUser(userData as Usuario);
+        return;
+      }
+
+      setUser(null);
+    } catch (_error) {
+      setUser(null);
+    }
   };
   useEffect(() => {
     obtenerUsuario();
@@ -32,16 +46,26 @@ export default function Header() {
       <Buscador />
       <a href="/cesta">Cesta</a>
       <div class="menuUsuario">
-        <button type="button" class="botonUsuario" onClick={() => setMenuAbierto(!menuAbierto)}>
-          {user?.nombre || "Usuario"} ▼
-        </button>
-        {menuAbierto && (
-          <div class="desplegableUsuario">
-            <a href="/pedidos">Mis pedidos</a>
-            <a href="/modificar-datos">Modificar datos</a>
-            <button type="button" onClick={cerrarSesion}>Cerrar sesión</button>
-          </div>
-        )}
+        {user
+          ? (
+            <>
+              <button
+                type="button"
+                class="botonUsuario"
+                onClick={() => setMenuAbierto(!menuAbierto)}
+              >
+                {user.nombre || "Cargando..."} ▼
+              </button>
+              {menuAbierto && (
+                <div class="desplegableUsuario">
+                  <a href="/pedidos">Mis pedidos</a>
+                  <a href="/modificar-datos">Modificar datos</a>
+                  <button type="button" onClick={cerrarSesion}>Cerrar sesión</button>
+                </div>
+              )}
+            </>
+          )
+          : <a class = "botonUsuario" href="/auth/register">Registrarse</a>}
       </div>
     </div>
   );
