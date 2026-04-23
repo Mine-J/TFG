@@ -1,37 +1,15 @@
 import { FunctionalComponent } from "preact/src/index.d.ts";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { Cesta, CestaProducto } from "@shared/types.ts";
 
-export const BotonSolicitarProducto: FunctionalComponent<{ nregistro: string }> = (
-  { nregistro },
+export const BotonSolicitarProducto: FunctionalComponent<
+  { nregistro: string; productoEnCesta: boolean | null; usuario_id: string | null }
+> = (
+  { nregistro, productoEnCesta, usuario_id },
 ) => {
-  const [enCesta, setEnCesta] = useState(false);
+  const [enCesta, setEnCesta] = useState(productoEnCesta);
 
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkEnCesta = async () => {
-      try {
-        const res = await fetch("/api/Datos/obtenerDatos");
-        const userData = await res.json();
-
-        if (userData?.id) {
-          setUserId(userData.id);
-
-          const response = await fetch(`/api/cesta/${userData.id}`);
-          if (response.ok) {
-            const cesta: Cesta = await response.json();
-            const estaEnCesta = cesta.productos?.some((p) => p.nregistro === nregistro);
-            setEnCesta(estaEnCesta);
-          }
-        }
-      } catch (err) {
-        console.error("Error:", err);
-      }
-    };
-
-    checkEnCesta();
-  }, [nregistro]);
+  const [userId] = useState<string | null>(usuario_id);
 
   const solicitar = async () => {
     try {
@@ -39,7 +17,6 @@ export const BotonSolicitarProducto: FunctionalComponent<{ nregistro: string }> 
         nregistro,
         cantidad: 1,
       };
-
       const response = await fetch("/api/cesta/añadir", {
         method: "POST",
         headers: {
@@ -62,7 +39,7 @@ export const BotonSolicitarProducto: FunctionalComponent<{ nregistro: string }> 
     <button
       type="button"
       onClick={solicitar}
-      class="boton-prospecto"
+      class={!userId ? "boton-Añadir-Cesta disabled" : "boton-Añadir-Cesta"}
       disabled={!userId}
     >
       {enCesta ? "🛒 Quitar de la cesta" : " 🛒 Añadir a la cesta"}

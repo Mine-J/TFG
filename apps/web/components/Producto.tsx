@@ -4,9 +4,11 @@ import { BotonSolicitarProducto } from "../islands/BotonSolicitarProducto.tsx";
 
 interface ProductoProps {
   producto: ProductoInfo;
+  productoEnCesta: boolean;
+  usuario_id: string | null;
 }
 
-export const Producto: FunctionalComponent<ProductoProps> = ({ producto }) => {
+export const Producto: FunctionalComponent<ProductoProps> = ({ producto, productoEnCesta, usuario_id }) => {
   return (
     <div class="producto-pagina">
       <div class="producto-contenido">
@@ -57,7 +59,7 @@ export const Producto: FunctionalComponent<ProductoProps> = ({ producto }) => {
               📄 Ver prospecto
             </a>
           )}
-          {producto.comerc && <BotonSolicitarProducto nregistro={producto.nregistro} />}
+          {producto.comerc && <BotonSolicitarProducto nregistro={producto.nregistro} productoEnCesta={productoEnCesta} usuario_id={usuario_id} />}
         </div>
       </div>
     </div>
