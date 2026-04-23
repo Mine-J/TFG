@@ -1,17 +1,18 @@
 import { PageProps } from "$fresh/server.ts";
+import { JWTHeader } from "@shared/types.ts";
 import { Footer } from "../components/Footer.tsx";
-import Header from "../islands/Header.tsx";
+import { Header } from "../islands/Header.tsx";
 
-export default function Layout({ Component, url }: PageProps) {
-    const sinHeaderFooter = url.pathname.includes("/auth/");
-    
-    return (
-        <div class="layout">
-            {!sinHeaderFooter && <Header />}
-            <div class="pagina">
-                <Component />
-            </div>
-            {!sinHeaderFooter && <Footer />}
-        </div>
+export default function Layout({ Component, state }: PageProps<unknown, JWTHeader>) {
+  const user = state?.auth ?? null;
+
+  return (
+    <div class="layout">
+      {<Header User={user} />}
+      <div class="pagina">
+        <Component />
+      </div>
+      {<Footer />}
+    </div>
   );
 }
