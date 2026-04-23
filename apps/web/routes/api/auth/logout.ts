@@ -7,7 +7,7 @@ export const handler: Handlers = {
       "Set-Cookie",
       "auth_token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict",
     );
-    headers.set("Location", "/auth/login");
+    headers.set("Location", "/");
 
     return new Response(null, {
       status: 303,
