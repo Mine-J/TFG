@@ -2,76 +2,106 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $_cesta_middleware from "./routes/(cesta)/_middleware.ts";
-import * as $_cesta_cesta from "./routes/(cesta)/cesta.tsx";
+import * as $_usuario_ConAuth_cesta_cesta from "./routes/(usuario)/(ConAuth)/(cesta)/cesta.tsx";
+import * as $_usuario_ConAuth_middleware from "./routes/(usuario)/(ConAuth)/_middleware.ts";
+import * as $_usuario_ConAuth_modificar_datos from "./routes/(usuario)/(ConAuth)/modificar-datos.tsx";
+import * as $_usuario_ConAuth_pedidos from "./routes/(usuario)/(ConAuth)/pedidos.tsx";
+import * as $_usuario_producto_id_ from "./routes/(usuario)/producto/[id].tsx";
+import * as $_usuario_productos from "./routes/(usuario)/productos.tsx";
 import * as $_404 from "./routes/_404.tsx";
 import * as $_app from "./routes/_app.tsx";
 import * as $_layout from "./routes/_layout.tsx";
 import * as $_middleware from "./routes/_middleware.ts";
+import * as $api_Datos_actualizarDatos from "./routes/api/Datos/actualizarDatos.ts";
+import * as $api_Datos_obtenerDatos from "./routes/api/Datos/obtenerDatos.ts";
 import * as $api_auth_RecuperarContraseña from "./routes/api/auth/RecuperarContraseña.ts";
 import * as $api_auth_RestablecerContraseña from "./routes/api/auth/RestablecerContraseña.ts";
+import * as $api_auth_login from "./routes/api/auth/login.ts";
+import * as $api_auth_logout from "./routes/api/auth/logout.ts";
+import * as $api_auth_register from "./routes/api/auth/register.ts";
 import * as $api_cesta_id_ from "./routes/api/cesta/[id].ts";
 import * as $api_cesta_actualizarCantidad from "./routes/api/cesta/actualizarCantidad.ts";
 import * as $api_cesta_añadir from "./routes/api/cesta/añadir.ts";
-import * as $api_login from "./routes/api/login.ts";
-import * as $api_logout from "./routes/api/logout.ts";
-import * as $api_obtenerDatos from "./routes/api/obtenerDatos.ts";
+import * as $api_cesta_realizarPedido from "./routes/api/cesta/realizarPedido.ts";
+import * as $api_mapa_farmacias from "./routes/api/mapa/farmacias.ts";
+import * as $api_mapa_ruta from "./routes/api/mapa/ruta.ts";
+import * as $api_pedidos_cancelar from "./routes/api/pedidos/cancelar.ts";
+import * as $api_pedidos_obtenerPedidos from "./routes/api/pedidos/obtenerPedidos.ts";
+import * as $api_pedidos_repetir from "./routes/api/pedidos/repetir.ts";
 import * as $api_producto_id_ from "./routes/api/producto/[id].ts";
 import * as $api_productos from "./routes/api/productos.ts";
-import * as $api_register from "./routes/api/register.ts";
 import * as $auth_middleware from "./routes/auth/_middleware.ts";
 import * as $auth_login from "./routes/auth/login.tsx";
 import * as $auth_recuperar_contraseña from "./routes/auth/recuperar-contraseña.tsx";
 import * as $auth_register from "./routes/auth/register.tsx";
 import * as $auth_restablecer_contraseña from "./routes/auth/restablecer-contraseña.tsx";
+import * as $farmacia_solicitudes from "./routes/farmacia/solicitudes.tsx";
 import * as $index from "./routes/index.tsx";
-import * as $producto_id_ from "./routes/producto/[id].tsx";
-import * as $productos from "./routes/productos.tsx";
 import * as $BotonSolicitarProducto from "./islands/BotonSolicitarProducto.tsx";
+import * as $Buscador from "./islands/Buscador.tsx";
 import * as $CestaComponent from "./islands/CestaComponent.tsx";
 import * as $Header from "./islands/Header.tsx";
 import * as $LoginForm from "./islands/LoginForm.tsx";
+import * as $MapaFarmacias from "./islands/MapaFarmacias.tsx";
+import * as $ModificarDatos from "./islands/ModificarDatos.tsx";
+import * as $Pedidos from "./islands/Pedidos.tsx";
 import * as $RecuperarContraseña from "./islands/RecuperarContraseña.tsx";
 import * as $RegisterForm from "./islands/RegisterForm.tsx";
 import * as $RestablecerContraseña from "./islands/RestablecerContraseña.tsx";
+import * as $Solicitudes from "./islands/Solicitudes.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
   routes: {
-    "./routes/(cesta)/_middleware.ts": $_cesta_middleware,
-    "./routes/(cesta)/cesta.tsx": $_cesta_cesta,
+    "./routes/(usuario)/(ConAuth)/(cesta)/cesta.tsx": $_usuario_ConAuth_cesta_cesta,
+    "./routes/(usuario)/(ConAuth)/_middleware.ts": $_usuario_ConAuth_middleware,
+    "./routes/(usuario)/(ConAuth)/modificar-datos.tsx": $_usuario_ConAuth_modificar_datos,
+    "./routes/(usuario)/(ConAuth)/pedidos.tsx": $_usuario_ConAuth_pedidos,
+    "./routes/(usuario)/producto/[id].tsx": $_usuario_producto_id_,
+    "./routes/(usuario)/productos.tsx": $_usuario_productos,
     "./routes/_404.tsx": $_404,
     "./routes/_app.tsx": $_app,
     "./routes/_layout.tsx": $_layout,
     "./routes/_middleware.ts": $_middleware,
+    "./routes/api/Datos/actualizarDatos.ts": $api_Datos_actualizarDatos,
+    "./routes/api/Datos/obtenerDatos.ts": $api_Datos_obtenerDatos,
     "./routes/api/auth/RecuperarContraseña.ts": $api_auth_RecuperarContraseña,
     "./routes/api/auth/RestablecerContraseña.ts": $api_auth_RestablecerContraseña,
+    "./routes/api/auth/login.ts": $api_auth_login,
+    "./routes/api/auth/logout.ts": $api_auth_logout,
+    "./routes/api/auth/register.ts": $api_auth_register,
     "./routes/api/cesta/[id].ts": $api_cesta_id_,
     "./routes/api/cesta/actualizarCantidad.ts": $api_cesta_actualizarCantidad,
     "./routes/api/cesta/añadir.ts": $api_cesta_añadir,
-    "./routes/api/login.ts": $api_login,
-    "./routes/api/logout.ts": $api_logout,
-    "./routes/api/obtenerDatos.ts": $api_obtenerDatos,
+    "./routes/api/cesta/realizarPedido.ts": $api_cesta_realizarPedido,
+    "./routes/api/mapa/farmacias.ts": $api_mapa_farmacias,
+    "./routes/api/mapa/ruta.ts": $api_mapa_ruta,
+    "./routes/api/pedidos/cancelar.ts": $api_pedidos_cancelar,
+    "./routes/api/pedidos/obtenerPedidos.ts": $api_pedidos_obtenerPedidos,
+    "./routes/api/pedidos/repetir.ts": $api_pedidos_repetir,
     "./routes/api/producto/[id].ts": $api_producto_id_,
     "./routes/api/productos.ts": $api_productos,
-    "./routes/api/register.ts": $api_register,
     "./routes/auth/_middleware.ts": $auth_middleware,
     "./routes/auth/login.tsx": $auth_login,
     "./routes/auth/recuperar-contraseña.tsx": $auth_recuperar_contraseña,
     "./routes/auth/register.tsx": $auth_register,
     "./routes/auth/restablecer-contraseña.tsx": $auth_restablecer_contraseña,
+    "./routes/farmacia/solicitudes.tsx": $farmacia_solicitudes,
     "./routes/index.tsx": $index,
-    "./routes/producto/[id].tsx": $producto_id_,
-    "./routes/productos.tsx": $productos,
   },
   islands: {
     "./islands/BotonSolicitarProducto.tsx": $BotonSolicitarProducto,
+    "./islands/Buscador.tsx": $Buscador,
     "./islands/CestaComponent.tsx": $CestaComponent,
     "./islands/Header.tsx": $Header,
     "./islands/LoginForm.tsx": $LoginForm,
+    "./islands/MapaFarmacias.tsx": $MapaFarmacias,
+    "./islands/ModificarDatos.tsx": $ModificarDatos,
+    "./islands/Pedidos.tsx": $Pedidos,
     "./islands/RecuperarContraseña.tsx": $RecuperarContraseña,
     "./islands/RegisterForm.tsx": $RegisterForm,
     "./islands/RestablecerContraseña.tsx": $RestablecerContraseña,
+    "./islands/Solicitudes.tsx": $Solicitudes,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
