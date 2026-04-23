@@ -16,7 +16,7 @@ export default function Buscador() {
     const timeoutId = setTimeout(async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/productos?name=${busqueda}`,
+          `/api/productos?name=${busqueda}`,
         );
         const data = await response.json() as RespuestaAPIProducto;
 
