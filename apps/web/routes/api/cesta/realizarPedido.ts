@@ -2,39 +2,29 @@ import { Handlers } from "$fresh/server.ts";
 import { query } from "@tfg/database/connection";
 import { Cesta, Farmacia, Pedido } from "@shared/types.ts";
 
-// Función para calcular distancia usando Mapbox Directions API
-async function calcularDistanciaMapbox(
+function calcularDistancia(
   lngUsuario: number,
   latUsuario: number,
   lngFarmacia: number,
   latFarmacia: number,
-): Promise<number | null> {
-  const MAPBOX_TOKEN = Deno.env.get("MAPBOX_API_KEY");
-  if (!MAPBOX_TOKEN) {
-    console.error("MAPBOX_ACCESS_TOKEN no configurado");
-    return null;
-  }
+): number {
+  // formula = raiz(latFarmacia - latUsuario)^2 + (lngFarmacia - lngUsuario)^2
+  const latDiff = latFarmacia - latUsuario;
+  const lngDiff = lngFarmacia - lngUsuario;
+  const distancia = Math.sqrt(latDiff * latDiff + lngDiff * lngDiff);
 
-  try {
-    const url =
-      `https://api.mapbox.com/directions/v5/mapbox/walking/${lngUsuario},${latUsuario};${lngFarmacia},${latFarmacia}?access_token=${MAPBOX_TOKEN}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.routes && data.routes.length > 0) {
-      // Distancia en metros, convertir a km
-      return data.routes[0].distance / 1000;
-    }
-    return null;
-  } catch (error) {
-    console.error("Error calculando distancia con Mapbox:", error);
-    return null;
-  }
+  // Convertir a kilómetros (aproximadamente, 1 grado ~ 111 km)
+  return distancia * 111;
 }
 
 export const handler: Handlers = {
   POST: async (req: Request) => {
-    const body: { usuario_id: string; distancia_maxima: number } = await req.json();
+    const body: {
+      usuario_id: string;
+      usuarioLat: number;
+      usuarioLon: number;
+      distancia_maxima: number;
+    } = await req.json();
 
     // Obtener la cesta actual antes de borrarla
     const cestaActual = await query<Cesta>(
@@ -49,44 +39,25 @@ export const handler: Handlers = {
       });
     }
 
-    // Obtener las coordenadas del usuario
-    const usuario = await query<{ lat: number; lng: number }>(
-      `SELECT lat, lng FROM usuarios WHERE id = $1 LIMIT 1`,
-      [body.usuario_id],
-    );
-
-    if (usuario.length === 0 || !usuario[0].lat || !usuario[0].lng) {
-      return new Response(JSON.stringify({ error: "Usuario sin coordenadas configuradas" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const { lat: latUsuario, lng: lngUsuario } = usuario[0];
-
     // Obtener todas las farmacias con coordenadas
     const farmacias = await query<Farmacia>(
       `SELECT id, email, cif, direccion, telefono, lat, lng FROM farmacias WHERE lat IS NOT NULL AND lng IS NOT NULL`,
     );
 
-    // Calcular distancias con Mapbox para cada farmacia
-    const farmaciasConDistancia = await Promise.all(
-      farmacias.map(async (farmacia) => {
-        const distancia = await calcularDistanciaMapbox(
-          lngUsuario,
-          latUsuario,
-          farmacia.lng,
+    const farmaciasConDistancia = farmacias.map((farmacia) => {
+      const distancia = calcularDistancia(
+        body.usuarioLon,
+        body.usuarioLat,
+        farmacia.lng,
           farmacia.lat,
         );
 
-        if (distancia === null) return null;
-
+      if (distancia === null) return null;
         return {
           ...farmacia,
           distancia,
         };
-      }),
-    );
+      })
 
     // Filtrar farmacias dentro del rango y ordenar por distancia
 

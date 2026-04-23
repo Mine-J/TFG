@@ -1,11 +1,15 @@
-import { FunctionalComponent } from "preact/src/index.d.ts";
 import { useEffect, useState } from "preact/hooks";
-import { CestaProducto, ProductoConDetalle, ProductoInfo, Usuario } from "@shared/types.ts";
+import { CestaProducto, ProductoConDetalle, ProductoInfo, UsuarioHeader } from "@shared/types.ts";
+import { FunctionalComponent } from "preact/src/index.d.ts";
 
-export const CestaComponent: FunctionalComponent = () => {
+type Props = {
+  datosUsuario: UsuarioHeader | null;
+};
+
+export const CestaComponent: FunctionalComponent<Props> = ({ datosUsuario }: Props) => {
   const [productos, setProductos] = useState<ProductoConDetalle[]>([]);
   const [cargando, setCargando] = useState(true);
-  const [user, setUser] = useState<Usuario | null>(null);
+  const [user] = useState<UsuarioHeader | null>(datosUsuario);
   const [distancia, setDistancia] = useState<number>(1);
   const [haciendoPedido, setHaciendoPedido] = useState(false);
 
@@ -16,6 +20,8 @@ export const CestaComponent: FunctionalComponent = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         usuario_id: user?.id,
+        usuarioLat: user?.lat,
+        usuarioLon: user?.lng,
         distancia_maxima: distancia,
       }),
     })
@@ -28,21 +34,20 @@ export const CestaComponent: FunctionalComponent = () => {
           } else {
             alert("Error al hacer el pedido. Por favor, inténtalo de nuevo.");
           }
+          setHaciendoPedido(false);
         }
       })
       .catch((err) => {
         console.error("Error al hacer el pedido:", err);
+        setHaciendoPedido(false);
       });
   };
 
   useEffect(() => {
     const fetchCesta = async () => {
       try {
-        const res = await fetch("/api/Datos/obtenerDatos");
-        const userData = await res.json();
-        setUser(userData);
-        if (userData?.id) {
-          const response = await fetch(`/api/cesta/${userData.id}`);
+        if (user?.id) {
+          const response = await fetch(`/api/cesta/${user.id}`);
           if (response.ok) {
             const cesta = await response.json();
 
@@ -80,6 +85,8 @@ export const CestaComponent: FunctionalComponent = () => {
             setProductos(productosConDetalle);
             setCargando(false);
           }
+        } else {
+          setCargando(false);
         }
       } catch (err) {
         console.error("Error al obtener la cesta:", err);
@@ -88,7 +95,7 @@ export const CestaComponent: FunctionalComponent = () => {
     };
 
     fetchCesta();
-  }, []);
+  }, [user?.id]);
 
   if (cargando) {
     return <div>Cargando cesta...</div>;
@@ -231,13 +238,18 @@ export const CestaComponent: FunctionalComponent = () => {
                   value={distancia}
                   class="info-usuario-input"
                   onChange={(e) => {
-                    setDistancia(parseInt(e.currentTarget.value));
+                    setDistancia(parseFloat(e.currentTarget.value));
                   }}
                 />
                 <span class="info-usuario-input-suffix">km</span>
               </div>
             </div>
-            <button type="submit" class="btn-hacer-pedido" onClick={handleHacerPedido} disabled={haciendoPedido}>
+            <button
+              type="submit"
+              class="btn-hacer-pedido"
+              onClick={handleHacerPedido}
+              disabled={haciendoPedido}
+            >
               {haciendoPedido ? "Cargando..." : "Hacer Pedido"}
             </button>
           </div>

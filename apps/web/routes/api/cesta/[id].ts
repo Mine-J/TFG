@@ -13,7 +13,6 @@ export const handler: Handlers = {
       );
 
       if (cesta.length === 0) {
-        
         return new Response(JSON.stringify({ usuario_id: id, productos: [] }), {
           headers: { "Content-Type": "application/json" },
         });
