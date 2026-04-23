@@ -1,6 +1,5 @@
 import { FreshContext, Handlers } from "$fresh/server.ts";
 import { query } from "@tfg/database/connection";
-import { verify } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
 
 export const handler: Handlers = {
@@ -14,35 +13,14 @@ export const handler: Handlers = {
           { status: 400, headers: { "Content-Type": "application/json" } },
         );
       }
-
-      // Verificar JWT
-      const JWT_SECRET = Deno.env.get("JWT_SECRET");
-      if (!JWT_SECRET) {
-        throw new Error("JWT_SECRET no configurado");
-      }
-
-      const key = await crypto.subtle.importKey(
-        "raw",
-        new TextEncoder().encode(JWT_SECRET),
-        { name: "HMAC", hash: "SHA-256" },
-        false,
-        ["sign", "verify"],
+      const token_valido: { entidad_id: string; tipo_usuario: string }[] = await query(
+        `SELECT entidad_id, tipo_usuario FROM tokens_resetear_password WHERE token_hasheado = $1 AND expires_at > CURRENT_TIMESTAMP`,
+        [token],
       );
 
-      let payload;
-      try {
-        payload = await verify(token, key);
-      } catch (_error) {
+      if (token_valido.length === 0) {
         return new Response(
           JSON.stringify({ error: "Token inválido o expirado" }),
-          { status: 401, headers: { "Content-Type": "application/json" } },
-        );
-      }
-
-      // Verificar que es un token de recuperación
-      if (payload.tipo !== "recuperacion") {
-        return new Response(
-          JSON.stringify({ error: "Token no válido para esta operación" }),
           { status: 401, headers: { "Content-Type": "application/json" } },
         );
       }
@@ -52,16 +30,20 @@ export const handler: Handlers = {
 
       // Actualizar contraseña en la BD
       const actualizado = await query(
-        `UPDATE usuarios SET password_hash = $1 WHERE id = $2`,
-        [password_hash, payload.id],
+        `UPDATE ${token_valido[0].tipo_usuario} SET password_hash = $1 WHERE id = $2 RETURNING *`,
+        [password_hash, token_valido[0].entidad_id],
       );
 
       if (actualizado.length === 0) {
-        await query(
-          `UPDATE farmacias SET password_hash = $1 WHERE id = $2`,
-          [password_hash, payload.id],
+        return new Response(
+          JSON.stringify({ error: "Error al actualizar la contraseña" }),
+          { status: 500, headers: { "Content-Type": "application/json" } },
         );
       }
+      await query(
+        `UPDATE tokens_resetear_password SET used_at = CURRENT_TIMESTAMP WHERE token_hasheado = $1`,
+        [token],
+      );
       return new Response(
         JSON.stringify({
           success: true,

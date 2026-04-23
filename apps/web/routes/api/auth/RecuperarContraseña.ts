@@ -1,8 +1,24 @@
 import { FreshContext, Handlers } from "$fresh/server.ts";
 import { query } from "@tfg/database/connection";
 import type { Farmacia, Usuario } from "@shared/types.ts";
-import { create } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+function generarTokenSeguro() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return toHex(bytes.buffer);
+}
+
+function toHex(buffer: ArrayBuffer): string {
+  return Array.from(new Uint8Array(buffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function sha256(text: string): Promise<string> {
+  const data = new TextEncoder().encode(text);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return toHex(hash);
+}
 
 export const handler: Handlers = {
   POST: async (req: Request, _ctx: FreshContext) => {
@@ -29,37 +45,32 @@ export const handler: Handlers = {
         );
       }
       let user;
+      let tipo: "usuarios" | "farmacias" = "usuarios";
       if (userFarmacias.length > 0) {
         user = userFarmacias[0];
+        tipo = "farmacias";
       } else {
         user = userUsuarios[0];
       }
 
-      const JWT_SECRET = Deno.env.get("JWT_SECRET");
-      if (!JWT_SECRET) {
-        throw new Error("JWT_SECRET no configurado");
-      }
+      const token = generarTokenSeguro();
+      const tokenHasheado = await sha256(token);
 
-      const key = await crypto.subtle.importKey(
-        "raw",
-        new TextEncoder().encode(JWT_SECRET),
-        { name: "HMAC", hash: "SHA-256" },
-        false,
-        ["sign", "verify"],
+      await query(
+        `
+        INSERT INTO tokens_resetear_password (
+          entidad_id,
+          tipo_usuario,
+          token_hasheado,
+          expires_at
+        )
+        VALUES ($1, $2, $3, CURRENT_TIMESTAMP + INTERVAL '15 minutes')
+      `,
+        [user.id, tipo, tokenHasheado],
       );
 
-      const jwt = await create(
-        { alg: "HS256", typ: "JWT" },
-        {
-          id: user.id,
-          tipo: "recuperacion",
-          exp: Math.floor(Date.now() / 1000) + (60 * 15),
-        },
-        key,
-      );
-
-      // Generar enlace de recuperación
-      const enlaceRecuperacion = `http://localhost:8000/auth/restablecer-contraseña?token=${jwt}`;
+      const enlaceRecuperacion =
+        `http://localhost:8000/auth/restablecer-contraseña?token=${tokenHasheado}`;
 
       // Enviar email con Gmail SMTP
       const GMAIL_USER = Deno.env.get("GMAIL_USER"); // farmafinder@gmail.com
@@ -86,7 +97,9 @@ export const handler: Handlers = {
             content: "auto",
             html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #007bff;">Hola ${user.email},</h2>
+                <h2 style="color: #007bff;">Hola ${
+              tipo === "usuarios" ? userUsuarios[0].nombre : userFarmacias[0].email
+            },</h2>
                 <p>Has solicitado restablecer tu contraseña en FarmaFinder.</p>
                 <p>Haz clic en el siguiente botón para crear una nueva contraseña:</p>
                 <div style="text-align: center; margin: 30px 0;">
