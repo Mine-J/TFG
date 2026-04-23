@@ -18,7 +18,7 @@ export const handler: Handlers = {
 
       if (!body.telefono.startsWith("+")) {
         return new Response(
-          JSON.stringify("El número de teléfono no debe incluir el prefijo internacional"),
+          JSON.stringify("El número de teléfono debe incluir el prefijo internacional"),
           {
             status: 400,
           },
