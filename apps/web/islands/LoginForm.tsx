@@ -76,8 +76,8 @@ export const LoginForm: FunctionalComponent = () => {
 
   return (
     <div class="divPrincipalRegister">
-      <a href="/auth/register" class="volverLoginRegister">Register</a>
-      <h2>Login</h2>
+      <a href="/auth/register" class="volverLoginRegister">Registrarse</a>
+      <h2>Iniciar sesión</h2>
 
       {/* Mensajes de éxito/error */}
       {tipo === "farmacia" && errorFarmacia && (

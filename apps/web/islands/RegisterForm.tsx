@@ -94,8 +94,8 @@ export const RegisterForm: FunctionalComponent = () => {
 
   return (
     <div class="divPrincipalRegister">
-      <a href="/auth/login" class="volverLoginRegister">Login</a>
-      <h2>Registro</h2>
+      <a href="/auth/login" class="volverLoginRegister">Iniciar sesión</a>
+      <h2>Crear cuenta</h2>
 
       {tipo === "farmacia" && errorFarmacia && (
         <div class="mensaje error">
@@ -194,7 +194,7 @@ export const RegisterForm: FunctionalComponent = () => {
             />
 
             <button type="submit" disabled={loading}>
-              {loading ? "Registrando..." : "Registrar"}
+              {loading ? "Creando cuenta..." : "Crear cuenta"}
             </button>
           </form>
         )}
@@ -266,7 +266,7 @@ export const RegisterForm: FunctionalComponent = () => {
             />
 
             <button type="submit" disabled={loading}>
-              {loading ? "Registrando..." : "Registrar"}
+              {loading ? "Creando cuenta..." : "Crear cuenta"}
             </button>
           </form>
         )}
