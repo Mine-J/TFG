@@ -7,8 +7,8 @@ export type Usuario = {
   direccion: string;
   telefono: string;
   codigo_postal: string;
-  lat?: number;
-  lng?: number;
+  lat: number;
+  lng: number;
 };
 export type Farmacia = {
   id?: string;
@@ -18,6 +18,22 @@ export type Farmacia = {
   direccion: string;
   telefono: string;
   cp: string;
+  horario?: string;
+  lat: number;
+  lng: number;
+};
+export type FarmaciaMapa = {
+  id: string;
+  direccion: string;
+  telefono: string;
+  codigo_postal: string;
+  horario?: string;
+  lat: number;
+  lng: number;
+};
+export type RespuestaMapaFarmacias = {
+  token: string;
+  farmacias: FarmaciaMapa[];
 };
 export type RespuestaAPIProducto = {
   totalFilas: number;
@@ -93,12 +109,48 @@ export type ProductoConDetalle = {
   cantidad: number;
   detalle: ProductoInfo | null;
 };
+
+export type EstadoPedido =
+  | "Pendiente"
+  | "Aceptado"
+  | "Cancelado"
+  | "Finalizado";
+
 export type Pedido = {
-  id?: string;
+  id: string;
   usuario_id: string;
   productos: CestaProducto[];
-  distancia_maxima: number;
+  farmacias_ids: string[];
+  fecha_creacion: string;
+  fecha_aceptacion: string | null;
+  farmacia_aceptadora_id?: string | null;
+  estado: EstadoPedido;
+};
+export type PedidoConDirecciones = {
+  pedido: Pedido;
+  direcciones_farmacias: string[];
+};
+
+export type UsuarioHeader = {
+  id: string;
+  tipo: "usuario" | "farmacia";
+  cif?: string;
+  nombre?: string;
+  apellidos?: string;
+  email: string;
+  telefono: string;
+  codigo_postal: string;
   direccion: string;
-  farmacias_ids?: string[];
-  fecha_creacion?: string;
+  lat: number;
+  lng: number;
+};
+
+export type JWTPayload = {
+  id: string;
+  tipo: "usuario" | "farmacia";
+  exp: number;
+};
+
+export type JWTHeader = {
+  auth?: UsuarioHeader | null;
 };
