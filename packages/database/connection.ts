@@ -34,7 +34,10 @@ export async function query<T>(
   let client;
   try {
     client = await dbPool.connect();
-    const result = await client.queryObject<T>(text, params);
+    const result = await client.queryObject<T>({
+      text,
+      args: params || [],
+    });
     return result.rows;
   } catch (err) {
     // Si falla por ConnectionError, reintenta una vez
@@ -42,7 +45,10 @@ export async function query<T>(
       console.warn("La conexión falló. Reintentando...");
       if (client) client.release();
       client = await dbPool.connect();
-      const result = await client.queryObject<T>(text, params);
+      const result = await client.queryObject<T>({
+        text,
+        args: params || [],
+      });
       return result.rows;
     }
     throw err;
