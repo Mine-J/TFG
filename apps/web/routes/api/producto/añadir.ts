@@ -1,19 +1,11 @@
 import { FreshContext, Handlers } from "$fresh/server.ts";
 import Axios from "npm:axios@^1.6.0";
-import { ProductoInfo, RespuestaAPIProducto } from "@shared/types.ts";
-import { query } from "@tfg/database/connection";
+import { RespuestaAPIProducto } from "@shared/types.ts";
 
 export const handler: Handlers = {
   GET: async (_req: Request, ctx: FreshContext) => {
     const id = ctx.params.id;
-    
-    const existeBD: ProductoInfo[] = await query(`SELECT * FROM productos WHERE nregistro = $1`, [id]);
-    
-    if (existeBD.length > 0) {
-      return new Response(JSON.stringify(existeBD[0]), {
-      headers: { "Content-Type": "application/json" },
-    })
-    }
+
     const respuesta = await Axios.get<RespuestaAPIProducto>(
       `https://cima.aemps.es/cima/rest/medicamentos?nregistro=${id}`,
     );
