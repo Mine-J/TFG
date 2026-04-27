@@ -44,6 +44,7 @@ export type RespuestaAPIProducto = {
 export type ProductoInfo = {
   nregistro: string;
   nombre: string;
+  pactivos: string;
   labtitular: string;
   labcomercializador: string;
   cpresc: string;
@@ -81,6 +82,35 @@ export type ProductoInfo = {
     id: number;
     nombre: string;
   }[];
+  atcs: {
+    codigo: string;
+    nombre: string;
+    nivel: number;
+  }[];
+  principiosActivos: {
+    id: number;
+    codigo: string;
+    nombre: string;
+    cantidad: string;
+    unidad: string;
+    orden: number;
+  }[];
+  excipientes: {
+    id: number;
+    nombre: string;
+    cantidad: string;
+    unidad: string;
+    orden: number;
+  }[];
+  presentaciones: {
+    cn: string;
+    nombre: string;
+    estado: {
+      aut: number;
+    };
+    comerc: boolean;
+    psum: boolean;
+  }[];
   formaFarmaceutica: {
     id: number;
     nombre: string;
@@ -101,10 +131,12 @@ export type Cesta = {
   productos: CestaProducto[];
 };
 export type CestaProducto = {
+  bioequivalente: boolean;
   nregistro: string;
   cantidad: number;
 };
 export type ProductoConDetalle = {
+  bioequivalente: boolean;
   nregistro: string;
   cantidad: number;
   detalle: ProductoInfo | null;
@@ -126,6 +158,15 @@ export type Pedido = {
   farmacia_aceptadora_id?: string | null;
   estado: EstadoPedido;
 };
+
+export type PedidoSSE = {
+  id: string;
+  fecha_creacion: string;
+  fecha_aceptacion: string | null;
+  farmacia_aceptadora_id?: string | null;
+  estado: EstadoPedido;
+};
+
 export type PedidoConDirecciones = {
   pedido: Pedido;
   direcciones_farmacias: string[];
@@ -143,6 +184,7 @@ export type UsuarioHeader = {
   direccion: string;
   lat: number;
   lng: number;
+  horario?: string;
 };
 
 export type JWTPayload = {
@@ -153,4 +195,9 @@ export type JWTPayload = {
 
 export type JWTHeader = {
   auth?: UsuarioHeader | null;
+};
+
+export type PedidoConDetalle = {
+  id: string;
+  productos: ProductoConDetalle[];
 };

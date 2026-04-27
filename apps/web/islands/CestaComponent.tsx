@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
-import { CestaProducto, ProductoConDetalle, ProductoInfo, UsuarioHeader } from "@shared/types.ts";
+import { ProductoConDetalle, UsuarioHeader } from "@shared/types.ts";
 import { FunctionalComponent } from "preact/src/index.d.ts";
 
 type Props = {
@@ -49,38 +49,10 @@ export const CestaComponent: FunctionalComponent<Props> = ({ datosUsuario }: Pro
         if (user?.id) {
           const response = await fetch(`/api/cesta/${user.id}`);
           if (response.ok) {
-            const cesta = await response.json();
-
             // Para cada producto en la cesta, obtener sus detalles
-            const productosConDetalle = await Promise.all(
-              cesta.productos.map(async (prod: CestaProducto) => {
-                try {
-                  const respuesta = await fetch(`/api/producto/${prod.nregistro}`);
-                  if (respuesta.ok) {
-                    const detalle: ProductoInfo = await respuesta.json();
-
-                    return {
-                      nregistro: prod.nregistro,
-                      cantidad: prod.cantidad,
-                      detalle: detalle,
-                    };
-                  } else {
-                    return {
-                      nregistro: prod.nregistro,
-                      cantidad: prod.cantidad,
-                      detalle: null,
-                    };
-                  }
-                } catch (err) {
-                  console.error(`Error al obtener producto ${prod.nregistro}:`, err);
-                  return {
-                    nregistro: prod.nregistro,
-                    cantidad: prod.cantidad,
-                    detalle: null,
-                  };
-                }
-              }),
-            );
+            const productosConDetalle: ProductoConDetalle[] = await fetch(
+              `/api/producto/productosCesta`,
+            ).then((res) => res.json());
 
             setProductos(productosConDetalle);
             setCargando(false);
@@ -152,6 +124,33 @@ export const CestaComponent: FunctionalComponent<Props> = ({ datosUsuario }: Pro
     }
   };
 
+  const checkBioequivalente = async (nregistro: string, bioequivalente: boolean) => {
+    try {
+      if (user?.id) {
+        await fetch("/api/cesta/checkBioequivalente", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            usuario_id: user.id,
+            nregistro,
+            bioequivalente,
+          }),
+        });
+
+        setProductos(
+          productos.map((p) => {
+            if (p.nregistro === nregistro) {
+              return { ...p, bioequivalente: !p.bioequivalente };
+            }
+            return p;
+          }).filter(Boolean) as ProductoConDetalle[],
+        );
+      }
+    } catch (err) {
+      console.error("Error al cambiar bioequivalente:", err);
+    }
+  };
+
   return (
     <div class="cesta-contenedor">
       <h1>Mi Cesta</h1>
@@ -161,7 +160,9 @@ export const CestaComponent: FunctionalComponent<Props> = ({ datosUsuario }: Pro
             <div class="cesta-lista">
               {productos.map((prod) => {
                 if (!prod.detalle) return null;
-
+                {
+                  console.log(prod);
+                }
                 return (
                   <div key={prod.nregistro} class="cesta-item">
                     <img
@@ -200,6 +201,18 @@ export const CestaComponent: FunctionalComponent<Props> = ({ datosUsuario }: Pro
                     >
                       🗑️
                     </button>
+                    <div class="bioequivalente-class">
+                      <label class="bioequivalente-label" for={`bioequivalente-${prod.nregistro}`}>
+                        BIOEQUIVALENTE
+                      </label>
+                      <input
+                        class="bioequivalente-checkbox"
+                        type="checkbox"
+                        id={`bioequivalente-${prod.nregistro}`}
+                        checked={prod.bioequivalente}
+                        onClick={() => checkBioequivalente(prod.nregistro, !prod.bioequivalente)}
+                      />
+                    </div>
                   </div>
                 );
               })}
