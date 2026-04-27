@@ -50,9 +50,12 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader>) {
       });
     }
   } else if (path === "/modificar-datos") {
-    const usuario = await query(`SELECT * FROM usuarios WHERE id = $1 LIMIT 1`, [
-      authUser.id,
-    ]);
+    const usuario = await query(
+      `SELECT id FROM usuarios u WHERE u.id = $1
+       UNION
+       SELECT id FROM farmacias f WHERE f.id = $1`,
+      [authUser.id]
+    );
     if (usuario.length === 0) {
       const headers = new Headers();
       headers.set("location", "/");

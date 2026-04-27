@@ -1,37 +1,25 @@
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { FunctionalComponent } from "preact/src/index.d.ts";
+import { UsuarioHeader } from "@shared/types.ts";
 
-export const ModificarDatos: FunctionalComponent = () => {
+export type datosUsuario = {
+  datosUsuario: UsuarioHeader;
+};
+
+export const ModificarDatos: FunctionalComponent<datosUsuario> = ({ datosUsuario }) => {
   const [guardando, setGuardando] = useState(false);
 
   const [error, setError] = useState("");
-
-  const [nombre, setNombre] = useState("");
-  const [apellidos, setApellidos] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [direccion, setDireccion] = useState("");
-  const [codigo_postal, setCodigo_postal] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/Datos/obtenerDatos");
-        const data = await res.json();
-
-        setNombre(data.nombre);
-        setApellidos(data.apellidos);
-        setEmail(data.email);
-        setTelefono(data.telefono);
-        setDireccion(data.direccion);
-        setCodigo_postal(data.codigo_postal);
-      } catch (err) {
-        console.error("Error al cargar datos:", err);
-        setError("Error al cargar los datos");
-      }
-    };
-    fetchData();
-  }, []);
+  const [id] = useState(datosUsuario.id);
+  const [nombre, setNombre] = useState(datosUsuario.nombre);
+  const [apellidos, setApellidos] = useState(datosUsuario.apellidos);
+  const [email, setEmail] = useState(datosUsuario.email);
+  const [telefono, setTelefono] = useState(datosUsuario.telefono);
+  const [direccion, setDireccion] = useState(datosUsuario.direccion);
+  const [codigo_postal, setCodigo_postal] = useState(datosUsuario.codigo_postal);
+  const [cif, setCif] = useState(datosUsuario.cif);
+  const [tipo] = useState(datosUsuario.tipo);
+  const [horario, setHorario] = useState(datosUsuario.horario);
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
@@ -44,18 +32,22 @@ export const ModificarDatos: FunctionalComponent = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          id,
+          cif,
           nombre,
           apellidos,
           email,
           telefono,
           direccion,
           codigo_postal,
+          tipo,
         }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
+        console.log(data);
         setError(data.error || "Error al actualizar los datos");
         return;
       }
@@ -76,27 +68,57 @@ export const ModificarDatos: FunctionalComponent = () => {
       {error && <div class="mensaje error">{error}</div>}
 
       <form class="modificar-datos-formulario" onSubmit={handleSubmit}>
-        <div class="modificar-datos-campo">
-          <label>Nombre</label>
-          <input
-            type="text"
-            value={nombre}
-            onInput={(e) => setNombre(e.currentTarget.value)}
-            required
-            disabled={guardando}
-          />
-        </div>
+        {tipo === "usuario"
+          ? (
+            <div class="modificar-datos-campo">
+              <label>Nombre</label>
+              <input
+                type="text"
+                value={nombre}
+                onInput={(e) => setNombre(e.currentTarget.value)}
+                required
+                disabled={guardando}
+              />
+            </div>
+          )
+          : (
+            <div class="modificar-datos-campo">
+              <label>CIF</label>
+              <input
+                type="text"
+                value={cif}
+                onInput={(e) => setCif(e.currentTarget.value)}
+                required
+                disabled={guardando}
+              />
+            </div>
+          )}
 
-        <div class="modificar-datos-campo">
-          <label>Apellidos</label>
-          <input
-            type="text"
-            value={apellidos}
-            onInput={(e) => setApellidos(e.currentTarget.value)}
-            required
-            disabled={guardando}
-          />
-        </div>
+        {tipo === "usuario"
+          ? (
+            <div class="modificar-datos-campo">
+              <label>Apellidos</label>
+              <input
+                type="text"
+                value={apellidos}
+                onInput={(e) => setApellidos(e.currentTarget.value)}
+                required
+                disabled={guardando}
+              />
+            </div>
+          )
+          : (
+            <div class="modificar-datos-campo">
+              <label>Horario</label>
+              <input
+                type="text"
+                value={horario}
+                onInput={(e) => setHorario(e.currentTarget.value)}
+                required
+                disabled={guardando}
+              />
+            </div>
+          )}
 
         <div class="modificar-datos-campo">
           <label>Email</label>

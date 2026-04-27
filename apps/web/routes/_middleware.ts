@@ -27,7 +27,10 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader>) {
     const tieneSesion = payload !== null;
 
     if (tieneSesion) {
-      if (payload?.tipo === "farmacia" && !path.startsWith("/farmacia/")) {
+      if (
+        payload?.tipo === "farmacia" && !path.startsWith("/farmacia/") &&
+        !path.startsWith("/api/") && !path.startsWith("/modificar-datos")
+      ) {
         const headers = new Headers();
         headers.set("location", "/farmacia/solicitudes");
         return new Response(null, {
@@ -44,9 +47,15 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader>) {
       }
       let user: UsuarioHeader[] = [];
       if (payload?.tipo === "farmacia") {
-        user = await query<UsuarioHeader>(`select id, cif, email, codigo_postal, direccion, lat, lng, telefono, $1 as tipo from farmacias where id = $2 limit 1`, [payload.tipo, payload.id]);
+        user = await query<UsuarioHeader>(
+          `select id, cif, email, codigo_postal, direccion, lat, lng, telefono, horario, $1 as tipo from farmacias where id = $2 limit 1`,
+          [payload.tipo, payload.id],
+        );
       } else if (payload?.tipo === "usuario") {
-        user = await query<UsuarioHeader>(`select id, nombre, apellidos, email, codigo_postal, direccion, lat, lng, telefono, $1 as tipo from usuarios where id = $2 limit 1`, [payload.tipo, payload.id]);
+        user = await query<UsuarioHeader>(
+          `select id, nombre, apellidos, email, codigo_postal, direccion, lat, lng, telefono, $1 as tipo from usuarios where id = $2 limit 1`,
+          [payload.tipo, payload.id],
+        );
       }
 
       ctx.state.auth = user[0] as UsuarioHeader;
