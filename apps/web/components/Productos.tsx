@@ -21,7 +21,7 @@ export const Productos: FunctionalComponent<ProductosProps> = ({ productos, prod
                     <img src={producto.fotos?.[0]?.url} alt={producto.nombre} />
                     <h2>{producto.nombre}</h2>
                   </a>
-                  {producto.comerc && (
+                  {producto.comerc && producto.cpresc !== "Uso Hospitalario" && (
                     <BotonSolicitarProducto
                       nregistro={producto.nregistro}
                       productoEnCesta={productosEnCesta?.productos.some((p) =>

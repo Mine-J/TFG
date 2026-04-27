@@ -14,6 +14,7 @@ export const BotonSolicitarProducto: FunctionalComponent<
   const solicitar = async () => {
     try {
       const producto: CestaProducto = {
+        bioequivalente: false,
         nregistro,
         cantidad: 1,
       };
