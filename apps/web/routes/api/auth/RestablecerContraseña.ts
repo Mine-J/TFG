@@ -13,8 +13,8 @@ export const handler: Handlers = {
           { status: 400, headers: { "Content-Type": "application/json" } },
         );
       }
-      const token_valido: { entidad_id: string; tipo_usuario: string }[] = await query(
-        `SELECT entidad_id, tipo_usuario FROM tokens_resetear_password WHERE token_hasheado = $1 AND expires_at > CURRENT_TIMESTAMP`,
+      const token_valido: { usuario_id: string; farmacia_id: string; tipo_usuario: string }[] = await query(
+        `SELECT usuario_id, farmacia_id, tipo_usuario FROM tokens_resetear_password WHERE token_hasheado = $1 AND expires_at > CURRENT_TIMESTAMP`,
         [token],
       );
 
@@ -31,7 +31,7 @@ export const handler: Handlers = {
       // Actualizar contraseña en la BD
       const actualizado = await query(
         `UPDATE ${token_valido[0].tipo_usuario} SET password_hash = $1 WHERE id = $2 RETURNING *`,
-        [password_hash, token_valido[0].entidad_id],
+        [password_hash, token_valido[0].tipo_usuario === "farmacias" ? token_valido[0].farmacia_id : token_valido[0].usuario_id],
       );
 
       if (actualizado.length === 0) {

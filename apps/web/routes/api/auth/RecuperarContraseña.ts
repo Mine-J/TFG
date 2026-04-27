@@ -56,15 +56,21 @@ export const handler: Handlers = {
       const token = generarTokenSeguro();
       const tokenHasheado = await sha256(token);
 
+      const id = tipo === "farmacias" ? "farmacia_id" : "usuario_id";
+
       await query(
         `
         INSERT INTO tokens_resetear_password (
-          entidad_id,
+          ${id},
           tipo_usuario,
           token_hasheado,
           expires_at
+        ) VALUES (
+          $1,
+          $2,
+          $3,
+          CURRENT_TIMESTAMP + INTERVAL '15 minutes'
         )
-        VALUES ($1, $2, $3, CURRENT_TIMESTAMP + INTERVAL '15 minutes')
       `,
         [user.id, tipo, tokenHasheado],
       );
