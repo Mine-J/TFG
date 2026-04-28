@@ -29,6 +29,7 @@
     "proseWrap": "preserve"
   },
   "imports": {
+    "bcryptjs": "npm:bcryptjs@2.4.3",
     "@shared/": "./packages/shared/",
     "@db/": "./packages/database/",
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",

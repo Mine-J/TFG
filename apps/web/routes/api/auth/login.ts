@@ -2,7 +2,7 @@ import { query } from "../../../../../packages/database/connection.ts"; // tu co
 import { FreshContext, Handlers } from "$fresh/server.ts";
 import type { Farmacia, Usuario } from "../../../../../packages/shared/types.ts";
 import { generarToken } from "../../../../../packages/shared/jwt.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
+import bcryptjs from "bcryptjs";
 
 export const handler: Handlers = {
   POST: async (req: Request, _ctx: FreshContext) => {
@@ -24,7 +24,7 @@ export const handler: Handlers = {
           });
         }
 
-        const passwordMatch = await bcrypt.compare(password, farmacia.password_hash);
+        const passwordMatch = await bcryptjs.compare(password, farmacia.password_hash);
         if (!passwordMatch) {
           return new Response(JSON.stringify("Contraseña incorrecta"), {
             status: 401,
@@ -57,7 +57,7 @@ export const handler: Handlers = {
           });
         }
 
-        const passwordMatch = await bcrypt.compare(password, user.password_hash);
+        const passwordMatch = await bcryptjs.compare(password, user.password_hash);
         if (!passwordMatch) {
           return new Response(JSON.stringify("Contraseña incorrecta"), {
             status: 401,

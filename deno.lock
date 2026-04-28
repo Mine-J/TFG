@@ -7,7 +7,11 @@
     "jsr:@std/internal@^1.0.12": "1.0.12",
     "jsr:@std/path@^1.0.6": "1.1.3",
     "npm:axios@*": "1.13.2",
-    "npm:axios@^1.6.0": "1.13.2"
+    "npm:axios@^1.6.0": "1.13.2",
+    "npm:bcryptjs@2.4.3": "2.4.3",
+    "npm:geojson@*": "0.5.0",
+    "npm:mapbox-gl@*": "3.21.0",
+    "npm:mapbox-gl@3.21.0": "3.21.0"
   },
   "jsr": {
     "@luca/esbuild-deno-loader@0.11.0": {
@@ -35,6 +39,47 @@
     }
   },
   "npm": {
+    "@mapbox/jsonlint-lines-primitives@2.0.2": {
+      "integrity": "sha512-rY0o9A5ECsTQRVhv7tL/OyDpGAoUB4tTvLiW1DSzQGq4bvTPhNw1VpSNjDJc5GFZ2XuyOtSWSVN05qOtcD71qQ=="
+    },
+    "@mapbox/mapbox-gl-supported@3.0.0": {
+      "integrity": "sha512-2XghOwu16ZwPJLOFVuIOaLbN0iKMn867evzXFyf0P22dqugezfJwLmdanAgU25ITvz1TvOfVP4jsDImlDJzcWg=="
+    },
+    "@mapbox/point-geometry@1.1.0": {
+      "integrity": "sha512-YGcBz1cg4ATXDCM/71L9xveh4dynfGmcLDqufR+nQQy3fKwsAZsWd/x4621/6uJaeB9mwOHE6hPeDgXz9uViUQ=="
+    },
+    "@mapbox/tiny-sdf@2.1.0": {
+      "integrity": "sha512-uFJhNh36BR4OCuWIEiWaEix9CA2WzT6CAIcqVjWYpnx8+QDtS+oC4QehRrx5cX4mgWs37MmKnwUejeHxVymzNg=="
+    },
+    "@mapbox/unitbezier@0.0.1": {
+      "integrity": "sha512-nMkuDXFv60aBr9soUG5q+GvZYL+2KZHVvsqFCzqnkGEf46U2fvmytHaEVc1/YZbiLn8X+eR3QzX1+dwDO1lxlw=="
+    },
+    "@mapbox/vector-tile@2.0.4": {
+      "integrity": "sha512-AkOLcbgGTdXScosBWwmmD7cDlvOjkg/DetGva26pIRiZPdeJYjYKarIlb4uxVzi6bwHO6EWH82eZ5Nuv4T5DUg==",
+      "dependencies": [
+        "@mapbox/point-geometry",
+        "@types/geojson",
+        "pbf"
+      ]
+    },
+    "@types/geojson-vt@3.2.5": {
+      "integrity": "sha512-qDO7wqtprzlpe8FfQ//ClPV9xiuoh2nkIgiouIptON9w5jvD/fA4szvP9GBlDVdJ5dldAl0kX/sy3URbWwLx0g==",
+      "dependencies": [
+        "@types/geojson"
+      ]
+    },
+    "@types/geojson@7946.0.16": {
+      "integrity": "sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg=="
+    },
+    "@types/pbf@3.0.5": {
+      "integrity": "sha512-j3pOPiEcWZ34R6a6mN07mUkM4o4Lwf6hPNt8eilOeZhTFbxFXmKhvXl9Y28jotFPaI1bpPDJsbCprUoNke6OrA=="
+    },
+    "@types/supercluster@7.1.3": {
+      "integrity": "sha512-Z0pOY34GDFl3Q6hUFYf3HkTwKEE02e7QgtJppBt+beEAxnyOpJua+voGFvxINBHa06GwLFFym7gRPY2SiKIfIA==",
+      "dependencies": [
+        "@types/geojson"
+      ]
+    },
     "asynckit@0.4.0": {
       "integrity": "sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q=="
     },
@@ -46,6 +91,9 @@
         "proxy-from-env"
       ]
     },
+    "bcryptjs@2.4.3": {
+      "integrity": "sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ=="
+    },
     "call-bind-apply-helpers@1.0.2": {
       "integrity": "sha512-Sp1ablJ0ivDkSzjcaJdxEunN5/XvksFJ2sMBFfq6x0ryhQV/2b/KwFe21cMpmHtPOSij8K99/wSfoEuTObmuMQ==",
       "dependencies": [
@@ -53,11 +101,17 @@
         "function-bind"
       ]
     },
+    "cheap-ruler@4.0.0": {
+      "integrity": "sha512-0BJa8f4t141BYKQyn9NSQt1PguFQXMXwZiA5shfoaBYHAb2fFk2RAX+tiWMoQU+Agtzt3mdt0JtuyshAXqZ+Vw=="
+    },
     "combined-stream@1.0.8": {
       "integrity": "sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==",
       "dependencies": [
         "delayed-stream"
       ]
+    },
+    "csscolorparser@1.0.3": {
+      "integrity": "sha512-umPSgYwZkdFoUrH5hIq5kf0wPSXiro51nPw0j2K/c83KflkPSTBGMz6NJvMB+07VlL0y7VPo6QJcDjcgKTTm3w=="
     },
     "delayed-stream@1.0.0": {
       "integrity": "sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ=="
@@ -69,6 +123,9 @@
         "es-errors",
         "gopd"
       ]
+    },
+    "earcut@3.0.2": {
+      "integrity": "sha512-X7hshQbLyMJ/3RPhyObLARM2sNxxmRALLKx1+NVFFnQ9gKzmCrxm9+uLIAdBcvc8FNLpctqlQ2V6AE92Ol9UDQ=="
     },
     "es-define-property@1.0.1": {
       "integrity": "sha512-e3nRfgfUZ4rNGL232gUgX06QNyyez04KdjFrF+LTRoOXmrOgFKDg4BCdsjW8EnT69eqdYGmRpJwiPVYNrCaW3g=="
@@ -107,6 +164,12 @@
     "function-bind@1.1.2": {
       "integrity": "sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA=="
     },
+    "geojson-vt@4.0.2": {
+      "integrity": "sha512-AV9ROqlNqoZEIJGfm1ncNjEXfkz2hdFlZf0qkVfmkwdKa8vj7H16YUOT81rJw1rdFhyEDlN2Tds91p/glzbl5A=="
+    },
+    "geojson@0.5.0": {
+      "integrity": "sha512-/Bx5lEn+qRF4TfQ5aLu6NH+UKtvIv7Lhc487y/c8BdludrCTpiWf9wyI0RTyqg49MFefIAvFDuEi5Dfd/zgNxQ=="
+    },
     "get-intrinsic@1.3.0": {
       "integrity": "sha512-9fSjSaos/fRIVIp+xSJlE6lfwhES7LNtKaCBIamHsjr2na1BiABJPo0mOjjz8GJDURarmCPGqaiVg5mfjb98CQ==",
       "dependencies": [
@@ -129,8 +192,14 @@
         "es-object-atoms"
       ]
     },
+    "gl-matrix@3.4.4": {
+      "integrity": "sha512-latSnyDNt/8zYUB6VIJ6PCh2jBjJX6gnDsoCZ7LyW7GkqrD51EWwa9qCoGixj8YqBtETQK/xY7OmpTF8xz1DdQ=="
+    },
     "gopd@1.2.0": {
       "integrity": "sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg=="
+    },
+    "grid-index@1.1.0": {
+      "integrity": "sha512-HZRwumpOGUrHyxO5bqKZL0B0GlUpwtCAzZ42sgxUPniu33R1LSFH5yrIcBCHjkctCAh3mtWKcKd9J4vDDdeVHA=="
     },
     "has-symbols@1.1.0": {
       "integrity": "sha512-1cDNdwJ2Jaohmb3sg4OmKaMBwuC48sYni5HUw2DvsC8LjGTLK9h+eb1X6RyuOHe4hT0ULCW68iomhjUoKUqlPQ=="
@@ -147,6 +216,46 @@
         "function-bind"
       ]
     },
+    "kdbush@4.0.2": {
+      "integrity": "sha512-WbCVYJ27Sz8zi9Q7Q0xHC+05iwkm3Znipc2XTlrnJbsHMYktW4hPhXUE8Ys1engBrvffoSCqbil1JQAa7clRpA=="
+    },
+    "mapbox-gl@3.21.0": {
+      "integrity": "sha512-0mv/LHDoW6QmxLEoNqCPuby428WTekfs38TtNXd/cxDOLdY6kFd/ztaSkcBeqNksbYSz2lXnPfBm8nN5+hxA0w==",
+      "dependencies": [
+        "@mapbox/jsonlint-lines-primitives",
+        "@mapbox/mapbox-gl-supported",
+        "@mapbox/point-geometry",
+        "@mapbox/tiny-sdf",
+        "@mapbox/unitbezier",
+        "@mapbox/vector-tile",
+        "@types/geojson",
+        "@types/geojson-vt",
+        "@types/pbf",
+        "@types/supercluster",
+        "cheap-ruler",
+        "csscolorparser",
+        "earcut",
+        "geojson-vt",
+        "gl-matrix",
+        "grid-index",
+        "kdbush",
+        "martinez-polygon-clipping",
+        "murmurhash-js",
+        "pbf",
+        "potpack",
+        "quickselect",
+        "supercluster",
+        "tinyqueue"
+      ]
+    },
+    "martinez-polygon-clipping@0.8.1": {
+      "integrity": "sha512-9PLLMzMPI6ihHox4Ns6LpVBLpRc7sbhULybZ/wyaY8sY3ECNe2+hxm1hA2/9bEEpRrdpjoeduBuZLg2aq1cSIQ==",
+      "dependencies": [
+        "robust-predicates",
+        "splaytree",
+        "tinyqueue"
+      ]
+    },
     "math-intrinsics@1.1.0": {
       "integrity": "sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g=="
     },
@@ -159,8 +268,48 @@
         "mime-db"
       ]
     },
+    "murmurhash-js@1.0.0": {
+      "integrity": "sha512-TvmkNhkv8yct0SVBSy+o8wYzXjE4Zz3PCesbfs8HiCXXdcTuocApFv11UWlNFWKYsP2okqrhb7JNlSm9InBhIw=="
+    },
+    "pbf@4.0.1": {
+      "integrity": "sha512-SuLdBvS42z33m8ejRbInMapQe8n0D3vN/Xd5fmWM3tufNgRQFBpaW2YVJxQZV4iPNqb0vEFvssMEo5w9c6BTIA==",
+      "dependencies": [
+        "resolve-protobuf-schema"
+      ],
+      "bin": true
+    },
+    "potpack@2.1.0": {
+      "integrity": "sha512-pcaShQc1Shq0y+E7GqJqvZj8DTthWV1KeHGdi0Z6IAin2Oi3JnLCOfwnCo84qc+HAp52wT9nK9H7FAJp5a44GQ=="
+    },
+    "protocol-buffers-schema@3.6.1": {
+      "integrity": "sha512-VG2K63Igkiv9p76tk1lilczEK1cT+kCjKtkdhw1dQZV3k3IXJbd3o6Ho8b9zJZaHSnT2hKe4I+ObmX9w6m5SmQ=="
+    },
     "proxy-from-env@1.1.0": {
       "integrity": "sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg=="
+    },
+    "quickselect@3.0.0": {
+      "integrity": "sha512-XdjUArbK4Bm5fLLvlm5KpTFOiOThgfWWI4axAZDWg4E/0mKdZyI9tNEfds27qCi1ze/vwTR16kvmmGhRra3c2g=="
+    },
+    "resolve-protobuf-schema@2.1.0": {
+      "integrity": "sha512-kI5ffTiZWmJaS/huM8wZfEMer1eRd7oJQhDuxeCLe3t7N7mX3z94CN0xPxBQxFYQTSNz9T0i+v6inKqSdK8xrQ==",
+      "dependencies": [
+        "protocol-buffers-schema"
+      ]
+    },
+    "robust-predicates@2.0.4": {
+      "integrity": "sha512-l4NwboJM74Ilm4VKfbAtFeGq7aEjWL+5kVFcmgFA2MrdnQWx9iE/tUGvxY5HyMI7o/WpSIUFLbC5fbeaHgSCYg=="
+    },
+    "splaytree@0.1.4": {
+      "integrity": "sha512-D50hKrjZgBzqD3FT2Ek53f2dcDLAQT8SSGrzj3vidNH5ISRgceeGVJ2dQIthKOuayqFXfFjXheHNo4bbt9LhRQ=="
+    },
+    "supercluster@8.0.1": {
+      "integrity": "sha512-IiOea5kJ9iqzD2t7QJq/cREyLHTtSmUT6gQsweojg9WH2sYJqZK9SswTu6jrscO6D1G5v5vYZ9ru/eq85lXeZQ==",
+      "dependencies": [
+        "kdbush"
+      ]
+    },
+    "tinyqueue@3.0.0": {
+      "integrity": "sha512-gRa9gwYU3ECmQYv3lslts5hxuIa90veaEcxDYuu3QGOIAEM2mOZkVHp48ANJuu1CURtRdHKUBY5Lm1tHV+sD4g=="
     }
   },
   "redirects": {
@@ -272,6 +421,7 @@
     "https://deno.land/std@0.214.0/fmt/colors.ts": "aeaee795471b56fc62a3cb2e174ed33e91551b535f44677f6320336aabb54fbb",
     "https://deno.land/std@0.214.0/io/buf_reader.ts": "c73aad99491ee6db3d6b001fa4a780e9245c67b9296f5bad9c0fa7384e35d47a",
     "https://deno.land/std@0.214.0/io/buf_writer.ts": "f82f640c8b3a820f600a8da429ad0537037c7d6a78426bbca2396fb1f75d3ef4",
+    "https://deno.land/std@0.214.0/io/types.ts": "748bbb3ac96abda03594ef5a0db15ce5450dcc6c0d841c8906f8b10ac8d32c96",
     "https://deno.land/std@0.214.0/path/_common/assert_path.ts": "2ca275f36ac1788b2acb60fb2b79cb06027198bc2ba6fb7e163efaedde98c297",
     "https://deno.land/std@0.214.0/path/_common/basename.ts": "569744855bc8445f3a56087fd2aed56bdad39da971a8d92b138c9913aecc5fa2",
     "https://deno.land/std@0.214.0/path/_common/common.ts": "6157c7ec1f4db2b4a9a187efd6ce76dcaf1e61cfd49f87e40d4ea102818df031",
@@ -586,6 +736,7 @@
     "https://deno.land/x/fresh@1.7.3/src/build/mod.ts": "b9d1695a86746ac3a1c52f0e07e723faa2310d1dfd109b9a2eebab6727c4702b",
     "https://deno.land/x/fresh@1.7.3/src/constants.ts": "4795d194b6c6b95f0e876c0a997fbaf57f94cfe253442c5819f95410870b79b3",
     "https://deno.land/x/fresh@1.7.3/src/dev/build.ts": "9aaf84a781ee4d11d73ec549425f273fe8339812fdd8f726e1ec1ba61bdf0e9d",
+    "https://deno.land/x/fresh@1.7.3/src/dev/cli.ts": "507892e303c0fc5aef9933b2066f8e220c26a51566c5e43c3b51053757afed44",
     "https://deno.land/x/fresh@1.7.3/src/dev/deps.ts": "93af624becfb2d8497e3d7ef0cf5ef48df61495dc5951b5f922c6a129a9fb75c",
     "https://deno.land/x/fresh@1.7.3/src/dev/dev_command.ts": "3e3dcc80180faf8868d44d892ddfa8c5ad06033e4d94c0934302e157db1de63d",
     "https://deno.land/x/fresh@1.7.3/src/dev/error.ts": "21a38d240c00279662e6adde41367f1da0ae7e2836d993f818ea94aabab53e7b",
@@ -651,6 +802,7 @@
     "https://deno.land/x/postgres@v0.19.3/query/oid.ts": "21fc714ac212350ba7df496f88ea9e01a4ee0458911d0f2b6a81498e12e7af4c",
     "https://deno.land/x/postgres@v0.19.3/query/query.ts": "510f9a27da87ed7b31b5cbcd14bf3028b441ac2ddc368483679d0b86a9d9f213",
     "https://deno.land/x/postgres@v0.19.3/query/transaction.ts": "8f4eef68f8e9b4be216199404315e6e08fe1fe98afb2e640bffd077662f79678",
+    "https://deno.land/x/postgres@v0.19.3/query/types.ts": "540f6f973d493d63f2c0059a09f3368071f57931bba68bea408a635a3e0565d6",
     "https://deno.land/x/postgres@v0.19.3/utils/deferred.ts": "5420531adb6c3ea29ca8aac57b9b59bd3e4b9a938a4996bbd0947a858f611080",
     "https://deno.land/x/postgres@v0.19.3/utils/utils.ts": "ca47193ea03ff5b585e487a06f106d367e509263a960b787197ce0c03113a738",
     "https://deno.land/x/ts_morph@21.0.1/common/DenoRuntime.ts": "a505f1feae9a77c8f6ab1c18c55d694719e96573f68e9c36463b243e1bef4c3e",
@@ -676,5 +828,10 @@
     "https://esm.sh/preact@10.22.0/denonext/preact.mjs": "8d07e2251111a69a3d7caf057173bbb806ac7d79954397ce5377309067f50097",
     "https://esm.sh/preact@10.22.0/hooks": "8a1ea3148ef7373b9c3dc027a147ff6728a4e53e10e3506c1191b087f0e564e1",
     "https://esm.sh/preact@10.22.0/jsx-runtime": "6c6117abd414386ed23785f7c198e03bee696c1fa0fee01b72a64abe5e7ae7fb"
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:bcryptjs@2.4.3"
+    ]
   }
 }

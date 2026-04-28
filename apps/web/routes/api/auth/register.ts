@@ -4,7 +4,7 @@ import { FreshContext, Handlers } from "$fresh/server.ts";
 import Axios from "npm:axios";
 import type { Farmacia, Usuario } from "../../../../../packages/shared/types.ts";
 import { generarToken } from "../../../../../packages/shared/jwt.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
+import bcryptjs from "bcryptjs";
 
 export const handler: Handlers = {
   POST: async (req: Request, ctx: FreshContext) => {
@@ -56,7 +56,7 @@ export const handler: Handlers = {
           });
         }
 
-        const passwordHash = await bcrypt.hash(body.password);
+        const passwordHash = await bcryptjs.hash(body.password, 10);
         const resultadoGeocoding = await Axios.get(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${body.direccion} ${body.cp}.json?access_token=${
             Deno.env.get("MAPBOX_API_KEY")
@@ -140,7 +140,7 @@ export const handler: Handlers = {
         }
 
         // Hashear la contraseña
-        const passwordHash = await bcrypt.hash(body.password);
+        const passwordHash = await bcryptjs.hash(body.password, 10);
         const resultadoGeocoding = await Axios.get(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${body.direccion} ${body.cp}.json?access_token=${
             Deno.env.get("MAPBOX_API_KEY")
