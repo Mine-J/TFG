@@ -154,7 +154,7 @@ export const Pedidos: FunctionalComponent = () => {
                     <div class="cesta-item pedido-item">
                       <div class="pedido-item-contenido">
                         <div class="cesta-item-info pedido-item-info">
-                          <h3>Pedido #{pedidos.indexOf(pedido) + 1}</h3>
+                          <h3>Pedido #{pedido.pedido.numero_pedido}</h3>
                           <p>Creado: {formatearFecha(pedido.pedido.fecha_creacion)}</p>
                           <p>
                             Estado:{" "}

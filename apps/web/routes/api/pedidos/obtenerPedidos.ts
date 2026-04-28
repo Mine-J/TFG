@@ -24,13 +24,20 @@ export const handler: Handlers = {
     }
     const respuesta = await query<PedidoConDirecciones>(
       `SELECT
-         row_to_json(p) AS pedido,
+             row_to_json(p) AS pedido,
          ARRAY(
            SELECT f.direccion
            FROM farmacias f
-           WHERE f.id = ANY(p.farmacias_ids)
+               WHERE f.id = ANY(p.farmacias_ids)
          ) AS direcciones_farmacias
-       FROM pedidos p
+           FROM (
+             SELECT
+               p.*,
+               ROW_NUMBER() OVER (
+                 ORDER BY p.fecha_creacion ASC, p.id ASC
+               ) AS numero_pedido
+             FROM pedidos p
+           ) p
        WHERE p.usuario_id = $1
        ORDER BY p.fecha_creacion DESC`,
       [payload.id],

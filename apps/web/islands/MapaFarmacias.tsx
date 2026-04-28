@@ -1,6 +1,6 @@
 /** @jsxImportSource preact */
 import { useEffect, useRef, useState } from "preact/hooks";
-import mapboxgl from "npm:mapbox-gl@3.21.0";
+declare const mapboxgl: typeof import("npm:mapbox-gl");
 import {
   PedidoConDirecciones,
   ProductoInfo,
@@ -259,7 +259,7 @@ export default function MapaFarmacias(Props: { datosUsuario: UsuarioHeader | nul
               }}
             >
               <p>
-                <strong>Pedido {pedidosAceptadosoPendientes.indexOf(pedido) + 1}</strong> -{" "}
+                <strong>Pedido #{pedido.pedido.numero_pedido}</strong> -{" "}
                 <span class={`pedido-estado ${getEstadoClase(pedido.pedido.estado)}`}>
                   {pedido.pedido.estado}
                 </span>

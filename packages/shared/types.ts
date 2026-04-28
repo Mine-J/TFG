@@ -150,6 +150,7 @@ export type EstadoPedido =
 
 export type Pedido = {
   id: string;
+  numero_pedido?: number;
   usuario_id: string;
   productos: CestaProducto[];
   farmacias_ids: string[];
@@ -195,9 +196,11 @@ export type JWTPayload = {
 
 export type JWTHeader = {
   auth?: UsuarioHeader | null;
+  numeroProductosCesta?: number;
 };
 
 export type PedidoConDetalle = {
   id: string;
+  numero_pedido: number;
   productos: ProductoConDetalle[];
 };
