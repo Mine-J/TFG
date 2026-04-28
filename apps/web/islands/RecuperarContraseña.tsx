@@ -28,7 +28,7 @@ export const RecuperarContraseña: FunctionalComponent = () => {
         setMensaje("Se ha enviado un enlace de recuperación a tu correo electrónico");
         setEmail("");
       } else {
-        setError(data.error || "Error al enviar el correo de recuperación");
+        setError(data.message || "Error al enviar el correo de recuperación");
       }
     } catch (err) {
       setError("Error al procesar la solicitud");

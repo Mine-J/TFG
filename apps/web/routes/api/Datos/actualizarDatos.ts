@@ -34,7 +34,7 @@ export const handler: Handlers = {
 
     try {
       const body = await req.json();
-      const { id, cif, nombre, apellidos, email, telefono, direccion, codigo_postal, tipo } = body;
+      const { id, nif, nombre, apellidos, email, telefono, direccion, codigo_postal, tipo } = body;
 
       const tipoBBDD = tipo === "farmacia" ? "farmacias" : "usuarios";
 
@@ -57,14 +57,14 @@ export const handler: Handlers = {
         );
       }
 
-      const cifExistente = await query(
-        `SELECT id FROM farmacias WHERE cif = $1 AND id != $2 LIMIT 1`,
-        [cif, id],
+      const nifExistente = await query(
+        `SELECT id FROM farmacias WHERE nif = $1 AND id != $2 LIMIT 1`,
+        [nif, id],
       );
 
-      if (cifExistente.length > 0) {
+      if (nifExistente.length > 0) {
         return new Response(
-          JSON.stringify({ error: "El CIF ya está en uso" }),
+          JSON.stringify({ error: "El NIF ya está en uso" }),
           {
             status: 409,
             headers: { "Content-Type": "application/json" },
@@ -124,14 +124,14 @@ export const handler: Handlers = {
       }
       const api_Key = Deno.env.get("API_KEY");
       const responseTelefono = await (Axios.get(
-          "https://api.api-ninjas.com/v1/validatephone?number=" + body.telefono,
-          { headers: { "X-Api-Key": api_Key } },
-        ));
-        if (!responseTelefono.data.is_valid) {
-          return new Response(JSON.stringify({ error: "El número de teléfono no es válido" }), {
-            status: 400,
-          });
-        }
+        "https://api.api-ninjas.com/v1/validatephone?number=" + body.telefono,
+        { headers: { "X-Api-Key": api_Key } },
+      ));
+      if (!responseTelefono.data.is_valid) {
+        return new Response(JSON.stringify({ error: "El número de teléfono no es válido" }), {
+          status: 400,
+        });
+      }
 
       // Actualizar los datos del usuario
       if (tipoBBDD === "usuarios") {
@@ -154,10 +154,10 @@ export const handler: Handlers = {
       } else {
         await query(
           `UPDATE farmacias 
-           SET cif = $1, email = $2, telefono = $3, direccion = $4, codigo_postal = $5, updated_at = CURRENT_TIMESTAMP, lat = $7, lng = $8
+           SET nif = $1, email = $2, telefono = $3, direccion = $4, codigo_postal = $5, updated_at = CURRENT_TIMESTAMP, lat = $7, lng = $8
            WHERE id = $6`,
           [
-            cif,
+            nif,
             email,
             telefono,
             direccion,

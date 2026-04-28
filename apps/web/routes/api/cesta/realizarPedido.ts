@@ -41,7 +41,7 @@ export const handler: Handlers = {
 
     // Obtener todas las farmacias con coordenadas
     const farmacias = await query<Farmacia>(
-      `SELECT id, email, cif, direccion, telefono, lat, lng FROM farmacias WHERE lat IS NOT NULL AND lng IS NOT NULL`,
+      `SELECT id, email, nif, direccion, telefono, lat, lng FROM farmacias WHERE lat IS NOT NULL AND lng IS NOT NULL`,
     );
 
     const farmaciasConDistancia = farmacias.map((farmacia) => {

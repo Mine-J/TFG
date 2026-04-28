@@ -17,7 +17,7 @@ export const ModificarDatos: FunctionalComponent<datosUsuario> = ({ datosUsuario
   const [telefono, setTelefono] = useState(datosUsuario.telefono);
   const [direccion, setDireccion] = useState(datosUsuario.direccion);
   const [codigo_postal, setCodigo_postal] = useState(datosUsuario.codigo_postal);
-  const [cif, setCif] = useState(datosUsuario.cif);
+  const [nif, setnif] = useState(datosUsuario.nif);
   const [tipo] = useState(datosUsuario.tipo);
   const [horario, setHorario] = useState(datosUsuario.horario);
 
@@ -33,7 +33,7 @@ export const ModificarDatos: FunctionalComponent<datosUsuario> = ({ datosUsuario
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id,
-          cif,
+          nif,
           nombre,
           apellidos,
           email,
@@ -83,11 +83,11 @@ export const ModificarDatos: FunctionalComponent<datosUsuario> = ({ datosUsuario
           )
           : (
             <div class="modificar-datos-campo">
-              <label>CIF</label>
+              <label>nif</label>
               <input
                 type="text"
-                value={cif}
-                onInput={(e) => setCif(e.currentTarget.value)}
+                value={nif}
+                onInput={(e) => setnif(e.currentTarget.value)}
                 required
                 disabled={guardando}
               />

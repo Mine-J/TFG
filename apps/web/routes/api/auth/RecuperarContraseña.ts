@@ -20,18 +20,97 @@ async function sha256(text: string): Promise<string> {
   return toHex(hash);
 }
 
+async function verificarLimitador(
+  correo: string,
+  direccionIp: string,
+): Promise<{ permitido: boolean; error?: string }> {
+  // Leer solo si hay intento reciente (último 15 minutos)
+  const intentosPorCorreo = await query<{ cantidad_intentos: number }>(
+    `
+    SELECT cantidad_intentos
+    FROM limitador_recuperacion_contrasena
+    WHERE correo = $1 AND ultimo_intento > CURRENT_TIMESTAMP - INTERVAL '15 minutes'
+    `,
+    [correo],
+  );
+
+  const intentosPorIp = await query<{ cantidad: number }>(
+    `
+    SELECT COUNT(*) as cantidad FROM limitador_recuperacion_contrasena
+    WHERE direccion_ip = $1 AND ultimo_intento > CURRENT_TIMESTAMP - INTERVAL '15 minutes'
+    `,
+    [direccionIp],
+  );
+
+  const cantidadCorreo = intentosPorCorreo[0]?.cantidad_intentos || 0;
+  const cantidadIp = intentosPorIp[0]?.cantidad || 0;
+
+  if (cantidadCorreo >= 3) {
+    return {
+      permitido: false,
+      error: "Demasiados intentos desde este correo. Intenta de nuevo en 15 minutos.",
+    };
+  }
+
+  if (cantidadIp >= 3) {
+    return {
+      permitido: false,
+      error: "Demasiados intentos desde esta red. Intenta de nuevo en 15 minutos.",
+    };
+  }
+
+  return { permitido: true };
+}
+
+async function registrarIntentoRecuperacion(
+  correo: string,
+  direccionIp: string,
+): Promise<void> {
+  await query(
+    `
+    INSERT INTO limitador_recuperacion_contrasena (correo, direccion_ip, cantidad_intentos, ultimo_intento)
+    VALUES ($1, $2, 1, CURRENT_TIMESTAMP)
+    ON CONFLICT (correo) DO UPDATE SET
+      cantidad_intentos = CASE
+        WHEN CURRENT_TIMESTAMP - limitador_recuperacion_contrasena.ultimo_intento > INTERVAL '15 minutes'
+        THEN 1
+        ELSE limitador_recuperacion_contrasena.cantidad_intentos + 1
+      END,
+      ultimo_intento = CURRENT_TIMESTAMP
+    `,
+    [correo, direccionIp],
+  );
+}
+
 export const handler: Handlers = {
   POST: async (req: Request, _ctx: FreshContext) => {
     try {
       const { email } = await req.json();
 
+      const direccionIp = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+        req.headers.get("x-real-ip") ||
+        "desconocida";
+
+      const verificacionLimitador = await verificarLimitador(email, direccionIp);
+      if (!verificacionLimitador.permitido) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            message: verificacionLimitador.error,
+          }),
+          { status: 429, headers: { "Content-Type": "application/json" } },
+        );
+      }
+
+      await registrarIntentoRecuperacion(email, direccionIp);
+      
       const userUsuarios = await query<Usuario>(
         `SELECT id, email, nombre FROM usuarios WHERE email = $1 LIMIT 1`,
         [email],
       );
 
       const userFarmacias = await query<Farmacia>(
-        `SELECT id, email, cif FROM farmacias WHERE email = $1 LIMIT 1`,
+        `SELECT id, email, nif FROM farmacias WHERE email = $1 LIMIT 1`,
         [email],
       );
 
@@ -104,12 +183,12 @@ export const handler: Handlers = {
             html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h2 style="color: #007bff;">Hola ${
-              tipo === "usuarios" ? userUsuarios[0].nombre : userFarmacias[0].email
+              tipo === "usuarios" ? userUsuarios[0].nombre : userFarmacias[0].nif
             },</h2>
                 <p>Has solicitado restablecer tu contraseña en FarmaFinder.</p>
                 <p>Haz clic en el siguiente botón para crear una nueva contraseña:</p>
                 <div style="text-align: center; margin: 30px 0;">
-                  <a href="${enlaceRecuperacion}" 
+                  <a href="${enlaceRecuperacion}"
                      style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
                             color: white;
                             padding: 14px 28px;
