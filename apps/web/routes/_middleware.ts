@@ -10,7 +10,8 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader>) {
   if (
     path.startsWith("/styles.") ||
     path.startsWith("/static/") ||
-    path.startsWith("/_frsh/")
+    path.startsWith("/_fresh/") ||
+    /\.(png|jpg|jpeg|svg|ico|webp|gif|css|js|map|woff|woff2|ttf|eot)$/i.test(path)
   ) {
     return ctx.next();
   }
@@ -48,7 +49,7 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader>) {
       let user: UsuarioHeader[] = [];
       if (payload?.tipo === "farmacia") {
         user = await query<UsuarioHeader>(
-          `select id, cif, email, codigo_postal, direccion, lat, lng, telefono, horario, $1 as tipo from farmacias where id = $2 limit 1`,
+          `select id, nif, email, codigo_postal, direccion, lat, lng, telefono, horario, $1 as tipo from farmacias where id = $2 limit 1`,
           [payload.tipo, payload.id],
         );
       } else if (payload?.tipo === "usuario") {
@@ -56,8 +57,16 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader>) {
           `select id, nombre, apellidos, email, codigo_postal, direccion, lat, lng, telefono, $1 as tipo from usuarios where id = $2 limit 1`,
           [payload.tipo, payload.id],
         );
-      }
 
+        const numeroProductosCesta = await query<{ total: number }>(
+          `SELECT COALESCE(SUM(jsonb_array_length(productos::jsonb)), 0) AS total
+           FROM cesta
+           WHERE usuario_id = $1`,
+          [payload.id],
+        );
+
+        ctx.state.numeroProductosCesta = Number(numeroProductosCesta[0]?.total ?? 0);
+      }
       ctx.state.auth = user[0] as UsuarioHeader;
       return await ctx.next();
     } else if (!esAuth) {
