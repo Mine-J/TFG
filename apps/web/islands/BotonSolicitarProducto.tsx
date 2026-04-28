@@ -13,6 +13,7 @@ export const BotonSolicitarProducto: FunctionalComponent<
 
   const solicitar = async () => {
     try {
+      const estabaEnCesta = Boolean(enCesta);
       const producto: CestaProducto = {
         bioequivalente: false,
         nregistro,
@@ -30,6 +31,14 @@ export const BotonSolicitarProducto: FunctionalComponent<
         const cesta: Cesta = await response.json();
         const estaEnCesta = cesta.productos?.some((p) => p.nregistro === nregistro);
         setEnCesta(estaEnCesta);
+
+        globalThis.dispatchEvent(
+          new CustomEvent("cesta:actualizada", {
+            detail: {
+              delta: estabaEnCesta ? -1 : 1,
+            },
+          }),
+        );
       }
     } catch (err) {
       console.error("Error:", err);

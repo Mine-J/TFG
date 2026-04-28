@@ -85,6 +85,12 @@ export const CestaComponent: FunctionalComponent<Props> = ({ datosUsuario }: Pro
           }),
         });
 
+        globalThis.dispatchEvent(
+          new CustomEvent("cesta:actualizada", {
+            detail: { delta: -1 },
+          }),
+        );
+
         setProductos(productos.filter((p) => p.nregistro !== nregistro));
 
         if (productos.length === 1) {

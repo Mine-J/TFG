@@ -58,21 +58,24 @@ export const handler: Handlers = {
 
     if (cestaActual.length > 0) {
       const productosActuales = cestaActual[0].productos || [];
-      const mapaCantidades = new Map<string, number>();
+      const mapaProductos = new Map<string, { cantidad: number; bioequivalente: boolean }>();
 
-      productosActuales.forEach((p: CestaProducto) => {
-        mapaCantidades.set(p.nregistro, (mapaCantidades.get(p.nregistro) || 0) + p.cantidad);
-      });
+      const acumularProducto = (producto: CestaProducto) => {
+        const actual = mapaProductos.get(producto.nregistro);
+        const cantidad = (actual?.cantidad ?? 0) + producto.cantidad;
+        const bioequivalente = Boolean(actual?.bioequivalente) || Boolean(producto.bioequivalente);
+        mapaProductos.set(producto.nregistro, { cantidad, bioequivalente });
+      };
 
-      productosPedido.forEach((p: CestaProducto) => {
-        mapaCantidades.set(p.nregistro, (mapaCantidades.get(p.nregistro) || 0) + p.cantidad);
-      });
+      productosActuales.forEach(acumularProducto);
+      productosPedido.forEach(acumularProducto);
 
-      const productosFusionados: CestaProducto[] = Array.from(mapaCantidades.entries()).map((
-        [nregistro, cantidad],
+      const productosFusionados: CestaProducto[] = Array.from(mapaProductos.entries()).map((
+        [nregistro, datos],
       ) => ({
         nregistro,
-        cantidad,
+        cantidad: datos.cantidad,
+        bioequivalente: datos.bioequivalente,
       }));
 
       await query(
@@ -80,9 +83,14 @@ export const handler: Handlers = {
         [JSON.stringify(productosFusionados), payload.id],
       );
     } else {
+      const productosNormalizados = productosPedido.map((producto) => ({
+        ...producto,
+        bioequivalente: Boolean(producto.bioequivalente),
+      }));
+
       await query(
         `INSERT INTO cesta (usuario_id, productos) VALUES ($1, $2)`,
-        [payload.id, JSON.stringify(productosPedido)],
+        [payload.id, JSON.stringify(productosNormalizados)],
       );
     }
 
