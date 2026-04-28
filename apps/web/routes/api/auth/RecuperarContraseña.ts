@@ -154,8 +154,9 @@ export const handler: Handlers = {
         [user.id, tipo, tokenHasheado],
       );
 
+      const url = new URL(req.url);
       const enlaceRecuperacion =
-        `http://localhost:8000/auth/restablecer-contraseña?token=${tokenHasheado}`;
+        `${url.protocol}//${url.host}/auth/restablecer-contraseña?token=${tokenHasheado}`;
 
       // Enviar email con Gmail SMTP
       const GMAIL_USER = Deno.env.get("GMAIL_USER"); // farmafinder@gmail.com
