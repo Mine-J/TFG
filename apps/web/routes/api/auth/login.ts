@@ -9,11 +9,11 @@ export const handler: Handlers = {
     try {
       const body = await req.json();
       if (body.tipo === "farmacia") {
-        const { cif, password } = body;
+        const { nif, password } = body;
 
         const result = (await query(
-          `SELECT * FROM farmacias WHERE cif = $1 LIMIT 1`,
-          [cif],
+          `SELECT * FROM farmacias WHERE nif = $1 LIMIT 1`,
+          [nif],
         )) as Farmacia[];
         const farmacia: Farmacia | null = result[0] ?? null;
 

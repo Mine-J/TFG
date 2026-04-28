@@ -9,7 +9,7 @@ export const RegisterForm: FunctionalComponent = () => {
 
   // Estados FARMACIA
   const [errorFarmacia, setErrorFarmacia] = useState("");
-  const [cif, setCif] = useState("");
+  const [nif, setnif] = useState("");
   const [emailFarmacia, setEmailFarmacia] = useState("");
   const [passwordFarmacia, setPasswordFarmacia] = useState("");
   const [direccionFarmacia, setDireccionFarmacia] = useState("");
@@ -39,7 +39,7 @@ export const RegisterForm: FunctionalComponent = () => {
       body = {
         tipo: "farmacia",
         email: emailFarmacia,
-        cif: cif,
+        nif: nif,
         password: passwordFarmacia,
         direccion: direccionFarmacia,
         cp: cpFarmacia,
@@ -149,9 +149,9 @@ export const RegisterForm: FunctionalComponent = () => {
 
             <input
               type="text"
-              placeholder="CIF"
-              value={cif}
-              onInput={(e) => setCif(e.currentTarget.value)}
+              placeholder="NIF"
+              value={nif}
+              onInput={(e) => setnif(e.currentTarget.value)}
               disabled={loading}
               required
             />

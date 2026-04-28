@@ -101,8 +101,11 @@ export const handler: Handlers = {
         // si no existe, continúa con el registro
       } else if (body.tipo === "farmacia") {
         console.log("Registrando farmacia:", body);
-        const cif = body.cif;
-        const rowCif = await query(`SELECT id FROM farmacias WHERE cif = '${cif}' LIMIT 1`);
+        const nif = body.nif;
+        const rowNif = await query(
+          `SELECT id FROM farmacias WHERE nif = $1 LIMIT 1`,
+          [nif],
+        );
         const rowEmail = await query(
           `SELECT id FROM farmacias WHERE LOWER(email) = LOWER($1) LIMIT 1`,
           [body.email],
@@ -119,8 +122,8 @@ export const handler: Handlers = {
           });
         }
 
-        if (rowCif.length > 0) {
-          // ya existe una farmacia con ese cif
+        if (rowNif.length > 0) {
+          // ya existe una farmacia con ese nif
           return new Response(JSON.stringify("Farmacia ya registrada"), { status: 409 });
         }
 
@@ -144,9 +147,9 @@ export const handler: Handlers = {
           }`,
         );
         const insertResultFarmacia: Farmacia[] = await query(
-          `INSERT INTO farmacias (cif, email, password_hash, direccion, codigo_postal, telefono, lat, lng) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+          `INSERT INTO farmacias (nif, email, password_hash, direccion, codigo_postal, telefono, lat, lng) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
           [
-            body.cif,
+            body.nif,
             body.email,
             passwordHash,
             body.direccion,

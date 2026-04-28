@@ -13,7 +13,7 @@ export type Usuario = {
 export type Farmacia = {
   id?: string;
   email: string;
-  cif: string;
+  nif: string;
   password_hash: string;
   direccion: string;
   telefono: string;
@@ -175,7 +175,7 @@ export type PedidoConDirecciones = {
 export type UsuarioHeader = {
   id: string;
   tipo: "usuario" | "farmacia";
-  cif?: string;
+  nif?: string;
   nombre?: string;
   apellidos?: string;
   email: string;

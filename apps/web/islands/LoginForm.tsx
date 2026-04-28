@@ -8,7 +8,7 @@ export const LoginForm: FunctionalComponent = () => {
 
   // Estados FARMACIA
   const [errorFarmacia, setErrorFarmacia] = useState("");
-  const [cif, setCif] = useState("");
+  const [nif, setnif] = useState("");
   const [passwordFarmacia, setPasswordFarmacia] = useState("");
 
   // Estados USUARIO
@@ -28,7 +28,7 @@ export const LoginForm: FunctionalComponent = () => {
     if (tipo === "farmacia") {
       body = {
         tipo: "farmacia",
-        cif,
+        nif: nif,
         password: passwordFarmacia,
       };
     } else {
@@ -124,9 +124,9 @@ export const LoginForm: FunctionalComponent = () => {
             <form class="formulario" onSubmit={handleSubmit}>
               <input
                 type="text"
-                placeholder="CIF"
-                value={cif}
-                onInput={(e) => setCif(e.currentTarget.value)}
+                placeholder="NIF"
+                value={nif}
+                onInput={(e) => setnif(e.currentTarget.value)}
                 disabled={loading}
                 required
               />
