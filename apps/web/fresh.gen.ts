@@ -22,24 +22,36 @@ import * as $api_auth_register from "./routes/api/auth/register.ts";
 import * as $api_cesta_id_ from "./routes/api/cesta/[id].ts";
 import * as $api_cesta_actualizarCantidad from "./routes/api/cesta/actualizarCantidad.ts";
 import * as $api_cesta_añadir from "./routes/api/cesta/añadir.ts";
+import * as $api_cesta_checkBioequivalente from "./routes/api/cesta/checkBioequivalente.ts";
 import * as $api_cesta_realizarPedido from "./routes/api/cesta/realizarPedido.ts";
+import * as $api_farmacia_solicitudesFarmacia_SEE from "./routes/api/farmacia/solicitudesFarmacia/SEE.ts";
+import * as $api_farmacia_solicitudesFarmacia_aceptar from "./routes/api/farmacia/solicitudesFarmacia/aceptar.ts";
+import * as $api_farmacia_solicitudesFarmacia_finalizar from "./routes/api/farmacia/solicitudesFarmacia/finalizar.ts";
+import * as $api_farmacia_solicitudesFarmacia_pedidos from "./routes/api/farmacia/solicitudesFarmacia/pedidos.ts";
+import * as $api_farmacia_solicitudesFarmacia_rechazar from "./routes/api/farmacia/solicitudesFarmacia/rechazar.ts";
 import * as $api_mapa_farmacias from "./routes/api/mapa/farmacias.ts";
 import * as $api_mapa_ruta from "./routes/api/mapa/ruta.ts";
 import * as $api_pedidos_cancelar from "./routes/api/pedidos/cancelar.ts";
 import * as $api_pedidos_obtenerPedidos from "./routes/api/pedidos/obtenerPedidos.ts";
 import * as $api_pedidos_repetir from "./routes/api/pedidos/repetir.ts";
 import * as $api_producto_id_ from "./routes/api/producto/[id].ts";
+import * as $api_producto_añadir from "./routes/api/producto/añadir.ts";
+import * as $api_producto_productosCesta from "./routes/api/producto/productosCesta.ts";
 import * as $api_productos from "./routes/api/productos.ts";
 import * as $auth_middleware from "./routes/auth/_middleware.ts";
 import * as $auth_login from "./routes/auth/login.tsx";
 import * as $auth_recuperar_contraseña from "./routes/auth/recuperar-contraseña.tsx";
 import * as $auth_register from "./routes/auth/register.tsx";
 import * as $auth_restablecer_contraseña from "./routes/auth/restablecer-contraseña.tsx";
+import * as $farmacia_aceptados from "./routes/farmacia/aceptados.tsx";
+import * as $farmacia_finalizados from "./routes/farmacia/finalizados.tsx";
 import * as $farmacia_solicitudes from "./routes/farmacia/solicitudes.tsx";
 import * as $index from "./routes/index.tsx";
+import * as $preguntas_frecuentes from "./routes/preguntas-frecuentes.tsx";
 import * as $BotonSolicitarProducto from "./islands/BotonSolicitarProducto.tsx";
 import * as $Buscador from "./islands/Buscador.tsx";
 import * as $CestaComponent from "./islands/CestaComponent.tsx";
+import * as $GestionPedidosFarmacias from "./islands/GestionPedidosFarmacias.tsx";
 import * as $Header from "./islands/Header.tsx";
 import * as $LoginForm from "./islands/LoginForm.tsx";
 import * as $MapaFarmacias from "./islands/MapaFarmacias.tsx";
@@ -48,7 +60,6 @@ import * as $Pedidos from "./islands/Pedidos.tsx";
 import * as $RecuperarContraseña from "./islands/RecuperarContraseña.tsx";
 import * as $RegisterForm from "./islands/RegisterForm.tsx";
 import * as $RestablecerContraseña from "./islands/RestablecerContraseña.tsx";
-import * as $Solicitudes from "./islands/Solicitudes.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -73,26 +84,42 @@ const manifest = {
     "./routes/api/cesta/[id].ts": $api_cesta_id_,
     "./routes/api/cesta/actualizarCantidad.ts": $api_cesta_actualizarCantidad,
     "./routes/api/cesta/añadir.ts": $api_cesta_añadir,
+    "./routes/api/cesta/checkBioequivalente.ts": $api_cesta_checkBioequivalente,
     "./routes/api/cesta/realizarPedido.ts": $api_cesta_realizarPedido,
+    "./routes/api/farmacia/solicitudesFarmacia/SEE.ts": $api_farmacia_solicitudesFarmacia_SEE,
+    "./routes/api/farmacia/solicitudesFarmacia/aceptar.ts":
+      $api_farmacia_solicitudesFarmacia_aceptar,
+    "./routes/api/farmacia/solicitudesFarmacia/finalizar.ts":
+      $api_farmacia_solicitudesFarmacia_finalizar,
+    "./routes/api/farmacia/solicitudesFarmacia/pedidos.ts":
+      $api_farmacia_solicitudesFarmacia_pedidos,
+    "./routes/api/farmacia/solicitudesFarmacia/rechazar.ts":
+      $api_farmacia_solicitudesFarmacia_rechazar,
     "./routes/api/mapa/farmacias.ts": $api_mapa_farmacias,
     "./routes/api/mapa/ruta.ts": $api_mapa_ruta,
     "./routes/api/pedidos/cancelar.ts": $api_pedidos_cancelar,
     "./routes/api/pedidos/obtenerPedidos.ts": $api_pedidos_obtenerPedidos,
     "./routes/api/pedidos/repetir.ts": $api_pedidos_repetir,
     "./routes/api/producto/[id].ts": $api_producto_id_,
+    "./routes/api/producto/añadir.ts": $api_producto_añadir,
+    "./routes/api/producto/productosCesta.ts": $api_producto_productosCesta,
     "./routes/api/productos.ts": $api_productos,
     "./routes/auth/_middleware.ts": $auth_middleware,
     "./routes/auth/login.tsx": $auth_login,
     "./routes/auth/recuperar-contraseña.tsx": $auth_recuperar_contraseña,
     "./routes/auth/register.tsx": $auth_register,
     "./routes/auth/restablecer-contraseña.tsx": $auth_restablecer_contraseña,
+    "./routes/farmacia/aceptados.tsx": $farmacia_aceptados,
+    "./routes/farmacia/finalizados.tsx": $farmacia_finalizados,
     "./routes/farmacia/solicitudes.tsx": $farmacia_solicitudes,
     "./routes/index.tsx": $index,
+    "./routes/preguntas-frecuentes.tsx": $preguntas_frecuentes,
   },
   islands: {
     "./islands/BotonSolicitarProducto.tsx": $BotonSolicitarProducto,
     "./islands/Buscador.tsx": $Buscador,
     "./islands/CestaComponent.tsx": $CestaComponent,
+    "./islands/GestionPedidosFarmacias.tsx": $GestionPedidosFarmacias,
     "./islands/Header.tsx": $Header,
     "./islands/LoginForm.tsx": $LoginForm,
     "./islands/MapaFarmacias.tsx": $MapaFarmacias,
@@ -101,7 +128,6 @@ const manifest = {
     "./islands/RecuperarContraseña.tsx": $RecuperarContraseña,
     "./islands/RegisterForm.tsx": $RegisterForm,
     "./islands/RestablecerContraseña.tsx": $RestablecerContraseña,
-    "./islands/Solicitudes.tsx": $Solicitudes,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
