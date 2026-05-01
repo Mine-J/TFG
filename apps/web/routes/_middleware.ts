@@ -30,7 +30,7 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader>) {
     if (tieneSesion) {
       if (
         payload?.tipo === "farmacia" && !path.startsWith("/farmacia/") &&
-        !path.startsWith("/api/") && !path.startsWith("/modificar-datos")
+        !path.startsWith("/api/") && !path.startsWith("/modificar-datos") && !path.startsWith("/preguntas-frecuentes")
       ) {
         const headers = new Headers();
         headers.set("location", "/farmacia/solicitudes");
