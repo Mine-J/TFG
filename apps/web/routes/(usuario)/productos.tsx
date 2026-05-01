@@ -16,7 +16,7 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader, Product
     const name = url.searchParams.get("name") || "";
 
     const respuesta = await Axios.get<RespuestaAPIProducto>(
-      `http://localhost:8000/api/productos?page=${page}&name=${name}`,
+      `${urlAbs}/api/productos?page=${page}&name=${name}`,
     );
 
     const producto = respuesta.data;
