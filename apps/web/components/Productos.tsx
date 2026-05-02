@@ -5,9 +5,10 @@ import { BotonSolicitarProducto } from "../islands/BotonSolicitarProducto.tsx";
 type ProductosProps = {
   productos: RespuestaAPIProducto;
   productosEnCesta: Cesta | null;
+  usuario_id: string | null;
 };
 
-export const Productos: FunctionalComponent<ProductosProps> = ({ productos, productosEnCesta }) => {
+export const Productos: FunctionalComponent<ProductosProps> = ({ productos, productosEnCesta, usuario_id }) => {
   const totalPaginas = Math.floor(productos.totalFilas / 200) + 1;
   return (
     <div>
@@ -27,7 +28,7 @@ export const Productos: FunctionalComponent<ProductosProps> = ({ productos, prod
                       productoEnCesta={productosEnCesta?.productos.some((p) =>
                         p.nregistro === producto.nregistro
                       ) ?? false}
-                      usuario_id={productosEnCesta?.usuario_id || null}
+                      usuario_id={usuario_id}
                     />
                   )}
                 </div>

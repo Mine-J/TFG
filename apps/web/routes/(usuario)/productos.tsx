@@ -7,6 +7,7 @@ import { query } from "@tfg/database/connection";
 interface ProductoPageProps {
   producto: RespuestaAPIProducto;
   productosEnCesta: Cesta | null;
+  usuario_id: string | null;
 }
 // Handler que obtiene los datos
 export async function handler(req: Request, ctx: FreshContext<JWTHeader, ProductoPageProps>) {
@@ -32,10 +33,10 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader, Product
         [ctx.state.auth.id],
       );
       const productosEnCesta = cestaResult[0] ?? null;
-      return ctx.render({ producto, productosEnCesta });
+      return ctx.render({ producto, productosEnCesta, usuario_id: ctx.state.auth.id });
     }
 
-    return ctx.render({ producto, productosEnCesta: null });
+    return ctx.render({ producto, productosEnCesta: null, usuario_id: null });
   } catch (error) {
     console.error("Error al obtener producto:", error);
     return ctx.renderNotFound();
@@ -43,5 +44,5 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader, Product
 }
 
 export default function Home({ data }: { data: ProductoPageProps }) {
-  return <Productos productos={data.producto} productosEnCesta={data.productosEnCesta} />;
+  return <Productos productos={data.producto} productosEnCesta={data.productosEnCesta} usuario_id={data.usuario_id} />;
 }
