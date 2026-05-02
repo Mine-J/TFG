@@ -2,6 +2,7 @@ import { FreshContext, PageProps } from "$fresh/server.ts";
 import { Producto } from "../../../components/Producto.tsx";
 import Axios from "npm:axios@^1.6.0";
 import { Cesta, JWTHeader, ProductoInfo } from "@shared/types.ts";
+import { query } from "@tfg/database/connection";
 
 interface ProductoPageProps {
   producto: ProductoInfo;
@@ -21,9 +22,14 @@ export async function handler(req: Request, ctx: FreshContext<JWTHeader, Product
     if (!producto) {
       return ctx.renderNotFound();
     }
-    const productosEnCesta: Cesta | null = ctx.state.auth
-      ? await fetch(`${urlAbs}/api/cesta/${ctx.state.auth.id}`).then((res) => res.json())
-      : null;
+    let productosEnCesta: Cesta | null = null;
+    if (ctx.state.auth) {
+      const cestaResult = await query<Cesta>(
+        `SELECT * FROM cesta WHERE usuario_id = $1 LIMIT 1`,
+        [ctx.state.auth.id],
+      );
+      productosEnCesta = cestaResult[0] ?? null;
+    }
     const productoEnCesta: boolean = productosEnCesta?.productos.some((p) =>
       p.nregistro === producto.nregistro
     ) ?? false;
