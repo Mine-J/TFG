@@ -1022,7 +1022,7 @@ button[type="submit"]:disabled:hover {
   top: calc(100% + 8px);
   left: 0;
   right: 0;
-  width: 100%;
+  width: 110%;
   background: white;
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
@@ -1055,6 +1055,9 @@ button[type="submit"]:disabled:hover {
   color: #333;
   margin-bottom: 4px;
   line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   pointer-events: none;
 }
 
