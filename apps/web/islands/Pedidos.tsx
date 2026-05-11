@@ -117,7 +117,7 @@ export const Pedidos: FunctionalComponent = () => {
         {pedidoSeleccionado && (
           <div class="pedido-detalles-global">
             <div class="pedido-detalles">
-              {pedidoSeleccionado.pedido.estado === "Aceptado" && (
+              {(pedidoSeleccionado.pedido.estado === "Aceptado" || pedidoSeleccionado.pedido.estado === "Finalizado") && (
                 <div class="pedido-detalles-farmacias pedido-detalles-aceptada">
                   <h4>Farmacia aceptada</h4>
                   <p class="pedido-farmacia-aceptada">
