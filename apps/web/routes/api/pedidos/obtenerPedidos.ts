@@ -27,8 +27,9 @@ export const handler: Handlers = {
              row_to_json(p) AS pedido,
          ARRAY(
            SELECT f.direccion
-           FROM farmacias f
-               WHERE f.id = ANY(p.farmacias_ids)
+           FROM unnest(p.farmacias_ids) WITH ORDINALITY AS pf(id, ord)
+           JOIN farmacias f ON f.id = pf.id
+           ORDER BY pf.ord
          ) AS direcciones_farmacias
            FROM (
              SELECT
