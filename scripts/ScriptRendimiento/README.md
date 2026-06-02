@@ -2,6 +2,12 @@
 
 Script de prueba de carga desarrollado con [k6](https://k6.io/) para evaluar el rendimiento de la aplicación FarmaFinder bajo condiciones de estrés.
 
+## Alcance actual y justificacion
+
+El resultado historico de este test se obtuvo solo con endpoints publicos para tener una baseline simple y repetible sin depender de credenciales ni del estado de datos.
+
+Esa baseline es util, pero parcial: no refleja la carga real de rutas autenticadas que consultan y actualizan base de datos.
+
 ## Dependencias
 
 - [k6](https://k6.io/) — herramienta de pruebas de carga
@@ -23,6 +29,18 @@ cd scripts/ScriptRendimiento
 k6 run script.js
 ```
 
+### Activar rutas autenticadas (opcional)
+
+Si se definen credenciales por variables de entorno, el mismo script ejecuta tambien rutas criticas autenticadas:
+
+```bash
+K6_USER_EMAIL="usuario@dominio.com" \
+K6_USER_PASSWORD="tu_password" \
+K6_FARMACIA_NIF="12345678A" \
+K6_FARMACIA_PASSWORD="tu_password" \
+k6 run script.js
+```
+
 ## Descripción del test
 
 El script simula una carga progresiva de usuarios concurrentes sobre los endpoints públicos de la aplicación:
@@ -40,6 +58,22 @@ El script simula una carga progresiva de usuarios concurrentes sobre los endpoin
 - `GET /productos` — listado de productos
 - `GET /auth/register` — página de registro
 
+Adicionalmente, si hay credenciales:
+
+- Usuario autenticado: `GET /api/producto/productosCesta`, `GET /api/pedidos/obtenerPedidos`, `GET /cesta`, `GET /pedidos`
+- Farmacia autenticada: `GET /farmacia/solicitudes`, `GET /api/farmacia/solicitudesFarmacia/pedidos?tipo=Pendiente`, `GET /api/farmacia/solicitudesFarmacia/SEE`
+
+## Escenarios criticos documentados (no automatizados en este script base)
+
+Para cerrar la cobertura funcional de rendimiento, se documentan estos escenarios para ejecucion en entorno de pruebas controlado:
+
+- Cesta (escritura BD): `POST /api/cesta/añadir`, `POST /api/cesta/actualizarCantidad`
+- Mis pedidos (escritura BD): `POST /api/cesta/realizarPedido`, `POST /api/pedidos/cancelar`
+- Panel farmacia (acciones sobre solicitudes): `POST /api/farmacia/solicitudesFarmacia/aceptar`, `POST /api/farmacia/solicitudesFarmacia/rechazar`, `POST /api/farmacia/solicitudesFarmacia/finalizar`
+- SSE farmacia: mantener conexiones concurrentes sobre `GET /api/farmacia/solicitudesFarmacia/SEE`
+
+Nota: estas operaciones modifican estado en base de datos y por eso se separan de la baseline publica.
+
 ### Umbrales definidos
 
 - `p(95) < 2000ms` — el 95% de las peticiones debe responder en menos de 2 segundos
@@ -47,28 +81,40 @@ El script simula una carga progresiva de usuarios concurrentes sobre los endpoin
 
 ## Resultados obtenidos
 
-| Métrica                      | Valor       |
-| ---------------------------- | ----------- |
-| Total de peticiones          | 5037        |
-| Peticiones por segundo       | 33.24 req/s |
-| Tasa de fallos               | 0.00%       |
-| Tiempo medio de respuesta    | 159.58ms    |
-| Tiempo mínimo                | 36.91ms     |
-| Tiempo máximo                | 1.5s        |
-| p(90)                        | 391.93ms    |
-| p(95)                        | 436.23ms    |
-| Usuarios simultáneos máximos | 100         |
-| Duración total               | 2m 31s      |
-| Datos recibidos              | 192 MB      |
+Estos resultados corresponden a la ejecución larga completa (stages hasta 100 VUs, ~2m30s). Resumen de métricas observadas:
 
-### Checks
+|                      Métrica |              Valor |
+| ---------------------------: | -----------------: |
+|          Total de peticiones |             11,085 |
+| Peticiones por segundo (avg) |        71.90 req/s |
+|          Peticiones fallidas | 0 / 11,085 (0.00%) |
+|    Tiempo medio de respuesta |          217.37 ms |
+|                Tiempo mínimo |           36.77 ms |
+|                Tiempo máximo |             3.14 s |
+|                        p(90) |          561.98 ms |
+|                        p(95) |          861.19 ms |
+|                  Iteraciones |                739 |
+|               Duración total |             ~2m30s |
+|       VUs máximos observados |                100 |
+|              Datos recibidos |      115 MB 748 kB |
+|               Checks totales | 8,129 (100% éxito) |
+|     Iteration duration (avg) |             8.27 s |
 
-| Check         | Resultado |
-| ------------- | --------- |
-| home 200      | ✅ 100%   |
-| productos 200 | ✅ 100%   |
-| register 200  | ✅ 100%   |
+### Checks (ejemplos reportados)
+
+- `home 200` — ✅
+- `productos 200` — ✅
+- `register 200` — ✅
+- `login usuario 200` — ✅
+- `api productosCesta 200` — ✅
+- `api obtenerPedidos 200` — ✅
+- `page cesta 200` — ✅
+- `page pedidos 200` — ✅
+- `login farmacia 200` — ✅
+- `panel solicitudes 200` — ✅
+- `api pedidos farmacia 200` — ✅
 
 ## Conclusiones
 
-Bajo una carga de hasta 100 usuarios simultáneos, el sistema mantiene un tiempo de respuesta medio de **159ms** y un p95 de **436ms**, muy por debajo del umbral establecido de 2000ms. La tasa de fallos fue del **0%** en las 5037 peticiones realizadas, lo que demuestra que la infraestructura desplegada en Deno Deploy es estable y suficiente para el caso de uso previsto de la aplicación.
+Durante la ejecución larga (stages hasta 100 VUs, ~2m30s) el sistema procesó 11,085 peticiones con **0% de fallos** y un p95 de **861 ms**, cumpliendo el umbral definido (`p(95) < 2000 ms`). Las rutas autenticadas incluidas en el script (login usuario/farmacia, consultas de cesta y pedidos, panel de farmacia) respondieron correctamente según los checks.
+
