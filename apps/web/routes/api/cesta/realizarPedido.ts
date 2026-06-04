@@ -8,13 +8,25 @@ function calcularDistancia(
   lngFarmacia: number,
   latFarmacia: number,
 ): number {
-  // formula = raiz(latFarmacia - latUsuario)^2 + (lngFarmacia - lngUsuario)^2
-  const latDiff = latFarmacia - latUsuario;
-  const lngDiff = lngFarmacia - lngUsuario;
-  const distancia = Math.sqrt(latDiff * latDiff + lngDiff * lngDiff);
+  const RADIO_TIERRA_KM = 6371;
 
-  // Convertir a kilómetros (aproximadamente, 1 grado ~ 111 km)
-  return distancia * 111;
+  const gradosARadianes = (grados: number): number => {
+    return grados * Math.PI / 180;
+  };
+
+  const latUsuarioRad = gradosARadianes(latUsuario);
+  const latFarmaciaRad = gradosARadianes(latFarmacia);
+
+  const diferenciaLatitud = gradosARadianes(latFarmacia - latUsuario);
+  const diferenciaLongitud = gradosARadianes(lngFarmacia - lngUsuario);
+
+  const a =
+    Math.sin(diferenciaLatitud / 2) ** 2 +
+    Math.cos(latUsuarioRad) *
+      Math.cos(latFarmaciaRad) *
+      Math.sin(diferenciaLongitud / 2) ** 2;
+
+  return 2 * RADIO_TIERRA_KM * Math.asin(Math.sqrt(a));
 }
 
 export const handler: Handlers = {
