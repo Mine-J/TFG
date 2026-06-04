@@ -48,7 +48,6 @@ export const handler: Handlers = {
           "https://api.api-ninjas.com/v1/validatephone?number=" + body.telefono,
           { headers: { "X-Api-Key": api_Key } },
         ));
-        console.log(responseTelefono.data.error);
         if (!responseTelefono.data.is_valid) {
           console.log("El número de teléfono no es válido");
           return new Response(JSON.stringify("El número de teléfono no es válido"), {
@@ -63,7 +62,6 @@ export const handler: Handlers = {
           }`,
         );
 
-        console.log("Resultado geocoding:", resultadoGeocoding.data);
 
         const insertResult: Usuario[] = await query(
           `INSERT INTO usuarios (email, password_hash, nombre, apellidos, telefono, direccion, codigo_postal, lat, lng) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
