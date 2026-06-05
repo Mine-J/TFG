@@ -9,6 +9,9 @@ export const Footer: FunctionalComponent = () => {
       <div class="footer-center">
         <p>&copy; Javier Sáez García | Proyecto de Fin de Grado - Universidad Nebrija, 2026</p>
       </div>
+      <div class="footer-left">
+        <a href="/protección-de-datos">Protección de datos</a>
+      </div>
     </div>
   );
 };
