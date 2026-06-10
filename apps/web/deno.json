@@ -8,6 +8,8 @@
     "start": "deno run -A --watch=static/,routes/,islands/,components/ dev.ts",
     "build": "deno run -A dev.ts build",
     "preview": "deno run -A main.ts",
+    "test:unit": "deno test -A tests/unit",
+    "test:e2e": "deno test -A tests/e2e",
     "update": "deno run -A -r https://fresh.deno.dev/update ."
   },
   "lint": {

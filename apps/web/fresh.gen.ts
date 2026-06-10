@@ -48,6 +48,7 @@ import * as $farmacia_finalizados from "./routes/farmacia/finalizados.tsx";
 import * as $farmacia_solicitudes from "./routes/farmacia/solicitudes.tsx";
 import * as $index from "./routes/index.tsx";
 import * as $preguntas_frecuentes from "./routes/preguntas-frecuentes.tsx";
+import * as $protección_de_datos from "./routes/protección-de-datos.tsx";
 import * as $BotonSolicitarProducto from "./islands/BotonSolicitarProducto.tsx";
 import * as $Buscador from "./islands/Buscador.tsx";
 import * as $CestaComponent from "./islands/CestaComponent.tsx";
@@ -114,6 +115,7 @@ const manifest = {
     "./routes/farmacia/solicitudes.tsx": $farmacia_solicitudes,
     "./routes/index.tsx": $index,
     "./routes/preguntas-frecuentes.tsx": $preguntas_frecuentes,
+    "./routes/protección-de-datos.tsx": $protección_de_datos,
   },
   islands: {
     "./islands/BotonSolicitarProducto.tsx": $BotonSolicitarProducto,
