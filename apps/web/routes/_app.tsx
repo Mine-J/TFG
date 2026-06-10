@@ -1,7 +1,7 @@
 import { type PageProps } from "$fresh/server.ts";
 export default function App({ Component }: PageProps) {
   return (
-    <html>
+    <html lang="es">
       <head>
         <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet" />
         <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>

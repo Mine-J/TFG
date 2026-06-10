@@ -9,11 +9,11 @@ export default function Layout({ Component, state }: PageProps<unknown, JWTHeade
 
   return (
     <div class="layout">
-      {<Header User={user} numeroProductosCesta={numeroProductosCesta} />}
-      <div class="pagina">
+      <Header User={user} numeroProductosCesta={numeroProductosCesta} />
+      <main class="pagina">
         <Component />
-      </div>
-      {<Footer />}
+      </main>
+      <Footer />
     </div>
   );
 }
